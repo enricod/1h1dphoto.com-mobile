@@ -68,7 +68,7 @@ class HomeScreen extends React.Component {
 
 class ProfileScreen extends React.Component {
   static navigationOptions = {
-    title: 'Profile',
+    title: 'Profilo',
   };
   render() {
     const { navigate } = this.props.navigation;
