@@ -1,7 +1,5 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * OnehOnedphoto
  */
 
 'use strict';
@@ -12,37 +10,27 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
-  View,
-  Button
+  View
 } from 'react-native';
-import {  StackNavigator } from 'react-navigation';
+import PropTypes from 'prop-types';
+import { Container,
+  Header,
+  Title,
+  Content,
+  Footer,
+  FooterTab,
+  Button,
+  Left,
+  Right,
+  Body,
+  Icon,
+  Drawer
+} from 'native-base';
 import Camera from 'react-native-camera';
 
-class Hello extends React.Component {
-  render() {
-    return( 
-      <Text>Ciao enrico</Text>
-    )
-  }
-}
+
 class CameraScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Camera',
-  };
-
-  takePicture() {
-    const options = {};
-    //options.location = ...
-    this.camera.capture({metadata: options})
-      .then((data) => {
-        console.log(data)
-        
-      })
-      .catch(err => console.error(err));
-  }
-
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <CameraComponent />
     );
@@ -50,53 +38,40 @@ class CameraScreen extends React.Component {
 }
 
 class HomeScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Welcome',
-  };
   render() {
-    const { navigate } = this.props.navigation;
     return (
-      <Button
-        title="Go to enrico's profile"
-        onPress={() =>
-          navigate('Profile', { name: 'Jane' })
-        }
-      />
+      <Text>MAIN!!!!</Text>
     );
   }
 }
 
 class ProfileScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Profilo',
-  };
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <View>
-        <Button
-          title="return to home"
-          onPress={() =>
-            navigate('Home', { name: 'Home' })
-          }
-        />
-        <Button
-          title="camera"
-          onPress={() =>
-            navigate('Camera', { name: 'Camera' })
-          }
-        />
+        <Text>Ciao ezio</Text>
       </View>
     );
   }
 }
 
-const OnehOnedphoto = StackNavigator({
-  Home: { screen: HomeScreen },
-  Profile: { screen: ProfileScreen },
-  Camera: { screen: CameraScreen },
-});
-
+class MainHeader extends React.Component {
+  render () {
+    return (
+      <Header>
+        <Left>
+          <Button transparent>
+            <Icon name='menu' />
+          </Button>
+        </Left>
+        <Body>
+          <Title>OnehOnedphoto</Title>
+        </Body>
+        <Right />
+      </Header>
+    );
+  }
+}
 
 class CameraComponent extends Component {
   render() {
@@ -123,6 +98,92 @@ class CameraComponent extends Component {
   }
 }
 
+class OnehOnedphoto extends React.Component {
+  constructor() {
+    super();
+    this.state = {currentScreen: 'homeScreen'};
+
+    this.changeScreen = this.changeScreen.bind(this);
+  }
+
+  getCurrentScreen() {
+    if (this.state.currentScreen === 'homeScreen') {
+      return <HomeScreen/>
+    } else if (this.state.currentScreen === 'cameraScreen') {
+      return <CameraScreen/>
+    }else if (this.state.currentScreen === 'profileScreen') {
+      return <ProfileScreen/>
+    }
+  }
+
+  changeScreen(e) {
+    // console.log(e);
+    this.setState({currentScreen:e});
+  }
+
+  render () {
+   return (
+      <Container>
+        <MainHeader />
+        <Content>
+          {this.getCurrentScreen()}
+        </Content>
+        <MainFooter onChangeScreen = {this.changeScreen}/>
+      </Container>
+    );
+  }
+}
+
+
+
+
+class MainFooter extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.onChange = this.onChange.bind(this);
+  }
+  onChange(screenName) 
+  {
+      this.props.onChangeScreen(screenName);
+  }
+  render () {
+    return (
+        <Footer>
+          <FooterTab>
+            <FooterBtn clicca = {this.onChange} title='Home' screen='homeScreen' icon='navigate' />
+            <FooterBtn clicca = {this.onChange} title='Camera' screen='cameraScreen' icon='camera' />
+            <FooterBtn clicca = {this.onChange} title='My photos' screen='profileScreen' icon='profile' />
+
+          </FooterTab>
+        </Footer>
+    );
+  }
+}
+
+class FooterBtn extends Component {
+  constructor(props) {
+    super(props);
+    this.onChange = this.onChange.bind(this);
+  }
+  onChange() {
+      this.props.clicca(this.props.screen);
+  } 
+  
+  render() {
+    return (
+      <Button onPress = {this.onChange} >
+        <Icon name={this.props.icon} />
+        <Text>{this.props.title}</Text>
+      </Button>
+    );
+  }
+}
+
+MainFooter.PropTypes = {
+  onChangeScreen: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -143,6 +204,5 @@ const styles = StyleSheet.create({
     margin: 40
   }
 });
-
 
 AppRegistry.registerComponent('OnehOnedphoto', () => OnehOnedphoto);
