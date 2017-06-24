@@ -12,7 +12,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
 
-### emulator
+### emulator (linux)
 
 cd ~/Android/Sdk/tools
 ./emulator -list-avds

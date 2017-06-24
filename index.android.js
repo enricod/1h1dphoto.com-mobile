@@ -82,6 +82,51 @@ class CameraComponent extends Component {
   }
 }
 
+
+/**
+ * contiene stato globale applicazione - per ora informazioni 
+ * su utente, se loggato o meno, e se loggato, l'UID da passare
+ * al server
+ */
+class AppContainer extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentScreen: 'homeScreen'
+    };
+
+    this.changeScreen = this.changeScreen.bind(this);
+  }
+
+  getCurrentScreen() {
+    if (this.state.currentScreen === 'homeScreen') {
+      return <HomeScreen/>
+    } else if (this.state.currentScreen === 'cameraScreen') {
+      return <CameraScreen/>
+    }else if (this.state.currentScreen === 'profileScreen') {
+      return <ProfileScreen/>
+    }
+  }
+
+  changeScreen(e) {
+    // console.log(e);
+    this.setState({currentScreen:e});
+  }
+
+  render() {
+    return (
+      <Container>
+        <MainHeader />
+        <Content>
+          {this.getCurrentScreen()}
+        </Content>
+        <MainFooter onChangeScreen = {this.changeScreen}/>
+      </Container>
+    );
+  }
+}
 class OnehOnedphoto extends React.Component {
   constructor() {
     super();
@@ -107,13 +152,7 @@ class OnehOnedphoto extends React.Component {
 
   render () {
    return (
-      <Container>
-        <MainHeader />
-        <Content>
-          {this.getCurrentScreen()}
-        </Content>
-        <MainFooter onChangeScreen = {this.changeScreen}/>
-      </Container>
+      <AppContainer />
     );
   }
 }
