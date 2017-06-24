@@ -20,11 +20,13 @@ import Camera from 'react-native-camera';
 
 class Hello extends React.Component {
   render() {
-    return( 
+    return(
       <Text>Ciao enrico</Text>
     )
   }
 }
+
+
 class CameraScreen extends React.Component {
   static navigationOptions = {
     title: 'Camera',
@@ -36,7 +38,7 @@ class CameraScreen extends React.Component {
     this.camera.capture({metadata: options})
       .then((data) => {
         console.log(data)
-        
+
       })
       .catch(err => console.error(err));
   }
