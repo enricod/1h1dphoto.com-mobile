@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
-  View
+  View,
+  AsyncStorage
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { Container,
@@ -83,6 +84,9 @@ class CameraComponent extends Component {
 }
 
 
+
+
+
 /**
  * contiene stato globale applicazione - per ora informazioni 
  * su utente, se loggato o meno, e se loggato, l'UID da passare
@@ -94,15 +98,36 @@ class AppContainer extends React.Component {
     super(props);
 
     this.state = {
-      currentScreen: 'homeScreen'
+      currentScreen: 'homeScreen',
+      user: {
+        username:'anon',
+        isAnon: true
+      }
     };
 
+    // this.storage = new Storage();
     this.changeScreen = this.changeScreen.bind(this);
   }
 
+  saveUser(user) {
+      AsyncStorage.setItem('user', user);
+  }
+
+
+  componentDidMount() {
+    AsyncStorage.getItem('user')
+      .then((value) => {
+          if (value) {
+            var user = JSON.parse(value);
+            this.setState( {user: user} )
+          } 
+        })
+  }
+  
+
   getCurrentScreen() {
     if (this.state.currentScreen === 'homeScreen') {
-      return <HomeScreen/>
+      return <HomeScreen user={this.state.user} />
     } else if (this.state.currentScreen === 'cameraScreen') {
       return <CameraScreen/>
     }else if (this.state.currentScreen === 'profileScreen') {
@@ -127,28 +152,17 @@ class AppContainer extends React.Component {
     );
   }
 }
+
+
 class OnehOnedphoto extends React.Component {
   constructor() {
     super();
     this.state = {currentScreen: 'homeScreen'};
 
-    this.changeScreen = this.changeScreen.bind(this);
+   
   }
 
-  getCurrentScreen() {
-    if (this.state.currentScreen === 'homeScreen') {
-      return <HomeScreen/>
-    } else if (this.state.currentScreen === 'cameraScreen') {
-      return <CameraScreen/>
-    }else if (this.state.currentScreen === 'profileScreen') {
-      return <ProfileScreen/>
-    }
-  }
-
-  changeScreen(e) {
-    // console.log(e);
-    this.setState({currentScreen:e});
-  }
+ 
 
   render () {
    return (
