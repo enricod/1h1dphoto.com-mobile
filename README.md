@@ -11,6 +11,14 @@ export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
+
+### emulator (linux)
+
+cd ~/Android/Sdk/tools
+./emulator -list-avds
+./emulator -avd <name>
+
+
 ### For vscode
 1. go to android directory
 1. duplicate "local.properties.template" and change name to "local.properties"
