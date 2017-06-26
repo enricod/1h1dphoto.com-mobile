@@ -191,8 +191,8 @@ class MainFooter extends React.Component {
           <FooterTab>
             <FooterBtn btnClick = {this.onChange} title='Home' screen='homeScreen' icon='navigate' />
             <FooterBtn btnClick = {this.onChange} title='Camera' screen='cameraScreen' icon='camera' />
-            <FooterBtn btnClick = {this.onChange} title='My photos' screen='profileScreen' icon='profile' />
-            <FooterBtn btnClick = {this.onChange} title='Profile' screen='profileScreen' icon='profile' />
+            <FooterBtn btnClick = {this.onChange} title='My photos' screen='profileScreen' icon='camera' />
+            <FooterBtn btnClick = {this.onChange} title='Profile' screen='profileScreen' icon='camera' />
   
           </FooterTab>
         </Footer>
