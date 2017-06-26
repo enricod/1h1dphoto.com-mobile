@@ -3,18 +3,22 @@
  */
 
 'use strict';
+
+<script src="http://localhost:8097"></script>
+
 import React, { Component } from 'react';
 import {
   AppRegistry,
   Dimensions,
   StyleSheet,
-  Text,
   TouchableHighlight,
-  View
+  View,
+  Image
 } from 'react-native';
-import PropTypes from 'prop-types';
+
 import { Container,
   Header,
+  Text,
   Title,
   Content,
   Footer,
@@ -24,10 +28,16 @@ import { Container,
   Right,
   Body,
   Icon,
-  Drawer
+  Drawer,
+  Grid,
+  Col,
+  Row,
+  CardItem,
+  Card,
+  H1,
+  H3
 } from 'native-base';
 import Camera from 'react-native-camera';
-
 
 class CameraScreen extends React.Component {
   render() {
@@ -40,16 +50,166 @@ class CameraScreen extends React.Component {
 class HomeScreen extends React.Component {
   render() {
     return (
-      <Text>MAIN!!!!</Text>
+      <View>
+
+        <HomeContestCard/>
+        
+        <Card>
+          <CardItem header>
+            <Text> Last contest </Text>
+          </CardItem>
+          <CardItem cardBody>
+            <Grid>
+              <Row>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNVvne0sQMrFBfuP3RJN0tKfC76suNiaMZPnnlqYB61DU7OgON'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa1wsJLR9x9xoE934SDrL91wSP6-Ijs-GYVBQbr5Zt3AEqrRVrBg'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-5HnKZc0mpGLF6L69lEAsqiWzBNSuzx4zHwAEmnlsBBPdkSz1eA'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+              </Row>
+            </Grid>
+          </CardItem>
+        </Card>
+
+        <Card>    
+          <CardItem header>
+            <Text> Yesterday </Text>
+          </CardItem>
+          <CardItem cardBody>
+            <Grid>
+              <Row>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNVvne0sQMrFBfuP3RJN0tKfC76suNiaMZPnnlqYB61DU7OgON'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa1wsJLR9x9xoE934SDrL91wSP6-Ijs-GYVBQbr5Zt3AEqrRVrBg'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-5HnKZc0mpGLF6L69lEAsqiWzBNSuzx4zHwAEmnlsBBPdkSz1eA'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+              </Row>
+            </Grid>
+          </CardItem>
+        </Card>
+        
+        <Card>
+          <CardItem header>
+            <Text> Two days ago </Text>
+          </CardItem>
+          <CardItem cardBody>
+            <Grid>
+              <Row>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNVvne0sQMrFBfuP3RJN0tKfC76suNiaMZPnnlqYB61DU7OgON'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa1wsJLR9x9xoE934SDrL91wSP6-Ijs-GYVBQbr5Zt3AEqrRVrBg'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-5HnKZc0mpGLF6L69lEAsqiWzBNSuzx4zHwAEmnlsBBPdkSz1eA'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+                <Col>
+                  <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}} style={{height: 100, width: null, flex: 1}}/>
+                </Col>
+              </Row>
+            </Grid>
+          </CardItem>
+        </Card>
+
+      </View>
+    );
+  }
+}
+
+class HomeContestCard extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      activeContest: false,
+      nextContest: 6900
+    }
+    this.selectContest = this.selectContest.bind(this);
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      this.setState({nextContest: this.state.nextContest-1})
+    },
+    1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  selectContest() {
+    this.props.onContestSelected(screens.cameraScreen);
+  }
+
+  render() {
+    let toDisplay = null;
+
+    if (this.state.activeContest) {
+      toDisplay = <Button onPress={this.selectContest}><Text>GO!!!</Text></Button>
+    } else {
+      toDisplay = <H1>Next contest: {this.state.nextContest.toString()}</H1>
+    }
+    return (
+      <Card>
+        <CardItem>
+          <Body>
+            {toDisplay}
+          </Body>
+        </CardItem>
+      </Card>
     );
   }
 }
 
 class ProfileScreen extends React.Component {
   render() {
-    return (
+    return (   
       <View>
-        <Text>Ciao ezio</Text>
+        <Card>
+          <CardItem>
+            <H3> Last contest </H3>
+          </CardItem>
+        </Card>
       </View>
     );
   }
@@ -76,15 +236,18 @@ class MainHeader extends React.Component {
 class CameraComponent extends Component {
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} >
         <Camera
           ref={(cam) => {
             this.camera = cam;
           }}
           style={styles.preview}
           aspect={Camera.constants.Aspect.fill}>
-          <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
+          <Button onPress={this.takePicture.bind(this)}>
+            <Text>CAPTURE</Text>
+          </Button>
         </Camera>
+
       </View>
     );
   }
@@ -101,24 +264,17 @@ class CameraComponent extends Component {
 class OnehOnedphoto extends React.Component {
   constructor() {
     super();
-    this.state = {currentScreen: 'homeScreen'};
-
+    this.state = {currentScreen: screens.homeScreen};
     this.changeScreen = this.changeScreen.bind(this);
   }
 
   getCurrentScreen() {
-    if (this.state.currentScreen === 'homeScreen') {
-      return <HomeScreen/>
-    } else if (this.state.currentScreen === 'cameraScreen') {
-      return <CameraScreen/>
-    }else if (this.state.currentScreen === 'profileScreen') {
-      return <ProfileScreen/>
-    }
+    return this.state.currentScreen;
   }
 
-  changeScreen(e) {
+  changeScreen(screen) {
     // console.log(e);
-    this.setState({currentScreen:e});
+    this.setState({currentScreen: screen});
   }
 
   render () {
@@ -134,9 +290,6 @@ class OnehOnedphoto extends React.Component {
   }
 }
 
-
-
-
 class MainFooter extends React.Component {
 
   constructor(props) {
@@ -144,18 +297,17 @@ class MainFooter extends React.Component {
 
     this.onChange = this.onChange.bind(this);
   }
-  onChange(screenName) 
+  onChange(screen) 
   {
-      this.props.onChangeScreen(screenName);
+      this.props.onChangeScreen(screen);
   }
   render () {
     return (
         <Footer>
           <FooterTab>
-            <FooterBtn clicca = {this.onChange} title='Home' screen='homeScreen' icon='navigate' />
-            <FooterBtn clicca = {this.onChange} title='Camera' screen='cameraScreen' icon='camera' />
-            <FooterBtn clicca = {this.onChange} title='My photos' screen='profileScreen' icon='profile' />
-
+            <FooterBtn onChange = {this.onChange} title='Home' screen={screens.homeScreen} icon='navigate' />
+            <FooterBtn onChange = {this.onChange} title='Camera' screen={screens.cameraScreen} icon='camera' />
+            <FooterBtn onChange = {this.onChange} title='My photos' screen={screens.profileScreen} icon='person' />
           </FooterTab>
         </Footer>
     );
@@ -167,8 +319,9 @@ class FooterBtn extends Component {
     super(props);
     this.onChange = this.onChange.bind(this);
   }
+
   onChange() {
-      this.props.clicca(this.props.screen);
+      this.props.onChange(this.props.screen);
   } 
   
   render() {
@@ -181,28 +334,22 @@ class FooterBtn extends Component {
   }
 }
 
-MainFooter.PropTypes = {
-  onChangeScreen: PropTypes.func
-};
+const screens = {
+  homeScreen: <HomeScreen/>,
+  cameraScreen: <CameraScreen/>,
+  profileScreen: <ProfileScreen/>
+}
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'row',
+    height: 500
   },
   preview: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center'
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    color: '#000',
-    padding: 10,
-    margin: 40
   }
 });
+
 
 AppRegistry.registerComponent('OnehOnedphoto', () => OnehOnedphoto);
