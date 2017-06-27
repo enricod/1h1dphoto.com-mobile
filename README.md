@@ -11,8 +11,7 @@ export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
-
-### emulator (linux)
+### Android Emulator (linux)
 
 cd ~/Android/Sdk/tools
 ./emulator -list-avds
@@ -27,3 +26,12 @@ cd ~/Android/Sdk/tools
 ## Start application
 1. Connect device or start emulator
 1. ```react-native run-android```
+
+
+## Generate apk
+[official guide](https://facebook.github.io/react-native/docs/signed-apk-android.html)
+
+If issue related to version occured, launch this command:
+```
+adb uninstall com.onehonedphoto
+```
