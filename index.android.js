@@ -3,19 +3,23 @@
  */
 
 'use strict';
+
+<script src="http://localhost:8097"></script>
+
 import React, { Component } from 'react';
 import {
-  AppRegistry,
+ AppRegistry,
   Dimensions,
   StyleSheet,
-  Text,
   TouchableHighlight,
   View,
+  Image,
   AsyncStorage
 } from 'react-native';
-import PropTypes from 'prop-types';
+
 import { Container,
   Header,
+  Text,
   Title,
   Content,
   Footer,
@@ -25,9 +29,17 @@ import { Container,
   Right,
   Body,
   Icon,
-  Drawer
+  Drawer,
+  Grid,
+  Col,
+  Row,
+  Card,
+  CardItem,
+  H1,
+  H3
 } from 'native-base';
 import Camera from 'react-native-camera';
+
 import HomeScreen from './src/HomeScreen.js';
 import ProfileScreen from './src/ProfileScreen.js';
 
@@ -39,6 +51,33 @@ class CameraScreen extends React.Component {
   }
 }
 
+class CameraComponent extends Component {
+  render() {
+    return (
+      <View style={styles.container} >
+        <Camera
+          ref={(cam) => {
+            this.camera = cam;
+          }}
+          style={styles.preview}
+          aspect={Camera.constants.Aspect.fill}>
+          <Button onPress={this.takePicture.bind(this)}>
+            <Text>CAPTURE</Text>
+          </Button>
+        </Camera>
+
+      </View>
+    );
+  }
+
+  takePicture() {
+    const options = {};
+    //options.location = ...
+    this.camera.capture({metadata: options})
+      .then((data) => console.log(data))
+      .catch(err => console.error(err));
+  }
+}
 
 class MainHeader extends React.Component {
   render () {
@@ -58,34 +97,49 @@ class MainHeader extends React.Component {
   }
 }
 
-class CameraComponent extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Camera
-          ref={(cam) => {
-            this.camera = cam;
-          }}
-          style={styles.preview}
-          aspect={Camera.constants.Aspect.fill}>
-          <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
-        </Camera>
-      </View>
-    );
-  }
+class MainFooter extends React.Component {
 
-  takePicture() {
-    const options = {};
-    //options.location = ...
-    this.camera.capture({metadata: options})
-      .then((data) => console.log(data))
-      .catch(err => console.error(err));
+  constructor(props) {
+    super(props);
+
+    this.onChange = this.onChange.bind(this);
+  }
+  onChange(screen) 
+  {
+      this.props.onChangeScreen(screen);
+  }
+  render () {
+    return (
+        <Footer>
+          <FooterTab>
+            <FooterBtn onChange = {this.onChange} title='Home' screen='homeScreen' icon='navigate' />
+            <FooterBtn onChange = {this.onChange} title='Camera' screen='cameraScreen' icon='camera' />
+            <FooterBtn onChange = {this.onChange} title='My photos' screen='profileScreen' icon='person' />
+          </FooterTab>
+        </Footer>
+    );
   }
 }
 
+class FooterBtn extends Component {
+  constructor(props) {
+    super(props);
+    this.onChange = this.onChange.bind(this);
+  }
 
-
-
+  onChange() {
+      this.props.onChange(this.props.screen);
+  } 
+  
+  render() {
+    return (
+      <Button onPress = {this.onChange} >
+        <Icon name={this.props.icon} />
+        <Text>{this.props.title}</Text>
+      </Button>
+    );
+  }
+}
 
 /**
  * contiene stato globale applicazione - per ora informazioni 
@@ -101,7 +155,7 @@ class AppContainer extends React.Component {
       currentScreen: 'homeScreen',
       user: {
         username:'anon',
-        isAnon: true
+        isAnon: false
       }
     };
 
@@ -113,7 +167,6 @@ class AppContainer extends React.Component {
       AsyncStorage.setItem('user', user);
   }
 
-
   componentDidMount() {
     AsyncStorage.getItem('user')
       .then((value) => {
@@ -124,20 +177,21 @@ class AppContainer extends React.Component {
         })
   }
   
-
-  getCurrentScreen() {
-    if (this.state.currentScreen === 'homeScreen') {
-      return <HomeScreen user={this.state.user} />
-    } else if (this.state.currentScreen === 'cameraScreen') {
-      return <CameraScreen/>
-    }else if (this.state.currentScreen === 'profileScreen') {
-      return <ProfileScreen/>
-    }
+   getCurrentScreen() {
+     if (this.state.currentScreen === 'homeScreen') {
+       return <HomeScreen user={this.state.user} />
+     } else if (this.state.currentScreen === 'cameraScreen') {
+       return <CameraScreen user={this.state.user} />
+     } else if (this.state.currentScreen === 'profileScreen') {
+       return <ProfileScreen user={this.state.user} />
+     }
+     
+     return <HomeScreen user={this.state.user} />
   }
 
-  changeScreen(e) {
+  changeScreen(screenObj) {
     // console.log(e);
-    this.setState({currentScreen:e});
+    this.setState({currentScreen: screenObj});
   }
 
   render() {
@@ -153,17 +207,7 @@ class AppContainer extends React.Component {
   }
 }
 
-
 class OnehOnedphoto extends React.Component {
-  constructor() {
-    super();
-    this.state = {currentScreen: 'homeScreen'};
-
-   
-  }
-
- 
-
   render () {
    return (
       <AppContainer />
@@ -173,74 +217,16 @@ class OnehOnedphoto extends React.Component {
 
 
 
-
-class MainFooter extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.onChange = this.onChange.bind(this);
-  }
-  onChange(screenName) 
-  {
-      this.props.onChangeScreen(screenName);
-  }
-  render () {
-    return (
-        <Footer>
-          <FooterTab>
-            <FooterBtn btnClick = {this.onChange} title='Home' screen='homeScreen' icon='navigate' />
-            <FooterBtn btnClick = {this.onChange} title='Camera' screen='cameraScreen' icon='camera' />
-            <FooterBtn btnClick = {this.onChange} title='My photos' screen='profileScreen' icon='camera' />
-            <FooterBtn btnClick = {this.onChange} title='Profile' screen='profileScreen' icon='camera' />
-  
-          </FooterTab>
-        </Footer>
-    );
-  }
-}
-
-class FooterBtn extends Component {
-  constructor(props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-  }
-  onChange() {
-      this.props.btnClick(this.props.screen);
-  } 
-  
-  render() {
-    return (
-      <Button onPress = {this.onChange} >
-        <Icon name={this.props.icon} />
-        <Text>{this.props.title}</Text>
-      </Button>
-    );
-  }
-}
-
-MainFooter.PropTypes = {
-  onChangeScreen: PropTypes.func
-};
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'row',
+    height: 500
   },
   preview: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center'
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    color: '#000',
-    padding: 10,
-    margin: 40
   }
 });
+
 
 AppRegistry.registerComponent('OnehOnedphoto', () => OnehOnedphoto);
