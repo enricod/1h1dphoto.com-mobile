@@ -155,7 +155,7 @@ class AppContainer extends React.Component {
       currentScreen: 'homeScreen',
       user: {
         username:'anon',
-        isAnon: false
+        isAnon: true
       }
     };
 

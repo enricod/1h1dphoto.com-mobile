@@ -26,47 +26,8 @@ import { Container,
   H3
 } from 'native-base';
 import PropTypes from 'prop-types';
+import LoginScreen from './LoginScreen.js'
 
-class LoginScreen extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      usernameText:'',
-      emailText: ''
-    }
-  }
-
-  onSendData() {
-
-  }
-
-  render() {
-
-    
-    return (
-      <View>
-        <Text>Please login</Text>
-        <Text >Username </Text>
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-          onChangeText={(text) => this.setState({usernameText: text})}
-          value={this.state.usernameText}
-        />
-        <Text >Email: </Text>
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 0}}
-          onChangeText={(text) => this.setState({emailText: text})}
-          value={this.state.emailText}
-        />
-        <Button onPress={this.onSendData} 
-            
-            accessibilityLabel="" ><Text>SEND</Text></Button>
-      </View>
-    );
-  }
-}
 
 export default class HomeScreen extends React.Component {
 
