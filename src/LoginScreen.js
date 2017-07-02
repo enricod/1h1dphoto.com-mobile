@@ -14,7 +14,7 @@ import {
   Content
 } from 'native-base';
 import PropTypes from 'prop-types';
-
+import Config from 'react-native-config'
 
 
 
@@ -27,7 +27,8 @@ export default class LoginScreen extends React.Component {
     this.state = {
       usernameText:'enricod',
       emailText: '',
-      codeText: '12345',
+      codeText: '',
+      codeFromApi: '',
       insertCode : false
     }
 
@@ -36,12 +37,37 @@ export default class LoginScreen extends React.Component {
   }
 
  
-
   onSendData() {
-    this.setState( {insertCode: true} )
+      let url = `${Config.SERVER_BASE_URL}/users/register`;
+      console.log(url);
+      return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: this.state.usernameText,
+                email: this.state.emailText,
+            })
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+            var _newUserKey = responseJson[0].body.userKey;
+            
+            this.setState( {insertCode: true, codeFromApi: _newUserKey} );
+            return responseJson[0].body;
+        })
+        .catch((error) => {
+                console.error(error);
+        });
   }
 
+
+
   onSendCode() {
+
+      
     this.setState( {insertCode: false} )
   }
 
