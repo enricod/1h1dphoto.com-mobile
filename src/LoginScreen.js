@@ -25,15 +25,18 @@ export default class LoginScreen extends React.Component {
     super(props);
 
     this.state = {
-      usernameText:'enricod',
-      emailText: '',
-      codeText: '',
-      codeFromApi: '',
-      insertCode : false
+        
+        username:'',
+        email:'',
+       
+      
+        codeText: '',
+        codeFromApi: '',
+        insertCode : false
     }
 
     this.onSendData = this.onSendData.bind(this);
-    this.onSendCode = this.onSendCode.bind(this);
+    this.onVerifyCode = this.onVerifyCode.bind(this);
   }
 
  
@@ -46,15 +49,12 @@ export default class LoginScreen extends React.Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                username: this.state.usernameText,
-                email: this.state.emailText,
-            })
+            body: JSON.stringify({ username: this.state.username, email: this.state.email})
         })
         .then((response) => response.json())
         .then((responseJson) => {
             var _newUserKey = responseJson[0].body.userKey;
-            
+            console.log( _newUserKey);
             this.setState( {insertCode: true, codeFromApi: _newUserKey} );
             return responseJson[0].body;
         })
@@ -65,13 +65,26 @@ export default class LoginScreen extends React.Component {
 
 
 
-  onSendCode() {
-
-      
-    this.setState( {insertCode: false} )
+  onVerifyCode() {
+    let res = this.state.codeText === this.state.codeFromApi;
+    if (res) {
+        this.props.saveUser( { username: this.state.username, 
+            email: this.state.email,
+            userkey: this.state.codeFromApi,
+            isAnon: false});
+    } else {
+        setState( {codeVerification: false});
+    }
   }
 
   render() {
+      const codeVerification = this.state.codeVerification;
+      let errorMsg = null;
+      if (codeVerification) {
+          errorMsg = <Label />
+      } else {
+        errorMsg = <Label>Codice errato</Label>
+      }
     if (this.state.insertCode) {
         return (
             <Content>
@@ -83,8 +96,9 @@ export default class LoginScreen extends React.Component {
                         />
                     </Item>
                 </Form>
-                <Button full onPress={this.onSendCode} 
-                    accessibilityLabel="" ><Text>SEND</Text></Button>
+                {errorMsg}
+                <Button full onPress={this.onVerifyCode} 
+                    accessibilityLabel="" ><Text>VERIFICA</Text></Button>
           
             </Content>
         )
@@ -94,14 +108,18 @@ export default class LoginScreen extends React.Component {
                 <Form>
                     <Item inlineLabel>
                         <Label>Username</Label>
-                        <Input  value={this.state.usernameText} 
-                                onChangeText={ (v) => this.setState({ usernameText: v }) }
+                        <Input  value={this.state.username} 
+                                onChangeText={ (v) => this.setState(
+                                    {username: v} ) }
                                 />
                     </Item>
                     <Item inlineLabel last>
                         <Label>Email</Label>
-                        <Input value={this.state.emailText} 
-                             onChangeText={ (v) => this.setState({ emailText: v }) }
+                        <Input value={this.state.email} 
+                            onChangeText={ (v) => this.setState(
+                                 {   email: v }
+                                 
+                            )}
                         />
                     </Item>
                 </Form>
@@ -111,4 +129,9 @@ export default class LoginScreen extends React.Component {
         );
     }
   }
+}
+
+
+LoginScreen.propTypes = {
+    saveUser: PropTypes.func
 }

@@ -164,7 +164,9 @@ class AppContainer extends React.Component {
   }
 
   saveUser(user) {
-      AsyncStorage.setItem('user', user);
+    console.log(user);
+      AsyncStorage.setItem('user', JSON.stringify(user));
+      setState( {user: user});
   }
 
   componentDidMount() {
@@ -179,7 +181,7 @@ class AppContainer extends React.Component {
   
    getCurrentScreen() {
      if (this.state.currentScreen === 'homeScreen') {
-       return <HomeScreen user={this.state.user} />
+       return <HomeScreen user={this.state.user} saveUser={this.saveUser} />
      } else if (this.state.currentScreen === 'cameraScreen') {
        return <CameraScreen user={this.state.user} />
      } else if (this.state.currentScreen === 'profileScreen') {

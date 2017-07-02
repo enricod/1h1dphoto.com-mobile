@@ -31,18 +31,20 @@ import LoginScreen from './LoginScreen.js'
 
 export default class HomeScreen extends React.Component {
 
+ 
   constructor(props) {
     super(props);
 
   }
 
+  
   render() {
     const isAnon = this.props.user.isAnon;
 
 
    
       if (isAnon) {
-           return (<LoginScreen />);
+           return (<LoginScreen saveUser={this.props.saveUser} />);
       }else {
         return (
         <View>
@@ -148,6 +150,10 @@ export default class HomeScreen extends React.Component {
       }
     
   }
+}
+
+HomeScreen.propTypes = {
+    saveUser: PropTypes.func
 }
 
 class HomeContestCard extends Component {
