@@ -161,12 +161,13 @@ class AppContainer extends React.Component {
 
     // this.storage = new Storage();
     this.changeScreen = this.changeScreen.bind(this);
+    this.saveUser = this.saveUser.bind(this);
   }
 
   saveUser(user) {
     console.log(user);
       AsyncStorage.setItem('user', JSON.stringify(user));
-      setState( {user: user});
+      this.setState( {user: user});
   }
 
   componentDidMount() {
@@ -217,8 +218,6 @@ class OnehOnedphoto extends React.Component {
   }
 }
 
-
-
 const styles = StyleSheet.create({
   container: {
     height: 500
@@ -229,6 +228,5 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
-
 
 AppRegistry.registerComponent('OnehOnedphoto', () => OnehOnedphoto);

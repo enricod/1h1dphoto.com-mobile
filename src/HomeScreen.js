@@ -26,134 +26,125 @@ import { Container,
   H3
 } from 'native-base';
 import PropTypes from 'prop-types';
-import LoginScreen from './LoginScreen.js'
+import _ from 'lodash';
 
+import LoginScreen from './LoginScreen.js';
 
 export default class HomeScreen extends React.Component {
-
- 
   constructor(props) {
     super(props);
 
-  }
+    this.events = [
+        {
+          'name': 'yesterday',
+          'images': [
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}
+          ]
+        },
+        {
+          'name': 'two days ago',
+          'images': [
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'},
+            {'uri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}
+          ]
+        }
+      ]
+    }
 
-  
   render() {
-    const isAnon = this.props.user.isAnon;
+    // FIXME: correggi login e reimplementa
+    //const isAnon = this.props.user.isAnon;
+    const isAnon = false;
+    let eventsCard = [];
 
-
-   
-      if (isAnon) {
-           return (<LoginScreen saveUser={this.props.saveUser} />);
-      }else {
-        return (
+    if (isAnon) {
+      return (<LoginScreen saveUser={this.props.saveUser} />);
+    } else {
+      this.events.forEach(function(event, i) {
+        eventsCard.push(<EventCard key = {i} event = {event} />);
+      });
+      return (
         <View>
           <HomeContestCard/>
-          <Card>
-            <CardItem header>
-              <Text> Last contest </Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Grid>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNVvne0sQMrFBfuP3RJN0tKfC76suNiaMZPnnlqYB61DU7OgON'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa1wsJLR9x9xoE934SDrL91wSP6-Ijs-GYVBQbr5Zt3AEqrRVrBg'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-5HnKZc0mpGLF6L69lEAsqiWzBNSuzx4zHwAEmnlsBBPdkSz1eA'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-              </Grid>
-            </CardItem>
-          </Card>
-
-          <Card>    
-            <CardItem header>
-              <Text> Yesterday </Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Grid>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNVvne0sQMrFBfuP3RJN0tKfC76suNiaMZPnnlqYB61DU7OgON'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa1wsJLR9x9xoE934SDrL91wSP6-Ijs-GYVBQbr5Zt3AEqrRVrBg'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-5HnKZc0mpGLF6L69lEAsqiWzBNSuzx4zHwAEmnlsBBPdkSz1eA'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-              </Grid>
-            </CardItem>
-          </Card>
-          
-          <Card>
-            <CardItem header>
-              <Text> Two days ago </Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Grid>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNVvne0sQMrFBfuP3RJN0tKfC76suNiaMZPnnlqYB61DU7OgON'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa1wsJLR9x9xoE934SDrL91wSP6-Ijs-GYVBQbr5Zt3AEqrRVrBg'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-5HnKZc0mpGLF6L69lEAsqiWzBNSuzx4zHwAEmnlsBBPdkSz1eA'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-              </Grid>
-            </CardItem>
-          </Card>
-
+          <View>
+            {eventsCard}
+          </View>
         </View>
-        )
-      }
-    
+      )
+    }
   }
 }
 
-HomeScreen.propTypes = {
-    saveUser: PropTypes.func
+class EventCard extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render () {
+    let imgInRow = 3;
+    let rows =  Math.trunc(this.props.event.images.length / imgInRow);
+    let chunks = _.chunk(this.props.event.images, imgInRow);
+    let cardRows = [];
+
+    for(var i=0; i<rows; i++) {
+      cardRows.push(<EventCardRow key={i} images={chunks[i]} />);
+    };
+
+    return (
+      <Card>
+        <CardItem header>
+          <Text>{this.props.event.name}</Text>
+        </CardItem>
+        <CardItem cardBody>
+          <Grid>
+            {cardRows}
+          </Grid>
+        </CardItem>
+      </Card>
+    )
+  }
+}
+
+class EventCardRow extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render () {
+    let rowImages = [];
+    this.props.images.forEach(function(image, i) {
+      rowImages.push(<EventCardRowImage key={i} image={image} />);
+    });
+
+    return (
+      <Row>
+        {rowImages}
+      </Row>
+    )
+  }
+}
+
+class EventCardRowImage extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render () {
+    return (
+      <Col>
+        <Image source={this.props.image} style={{height: 100, width: null, flex: 1}}/>
+      </Col>
+    )
+  }
 }
 
 class HomeContestCard extends Component {
@@ -203,5 +194,6 @@ class HomeContestCard extends Component {
 }
 
 HomeScreen.PropTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
+  saveUser: PropTypes.func
 }

@@ -16,20 +16,15 @@ import {
 import PropTypes from 'prop-types';
 import Config from 'react-native-config'
 
-
-
-
 export default class LoginScreen extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {
-        
+    this.state = {        
         username:'',
         email:'',
-       
-      
+
         codeText: '',
         codeFromApi: '',
         insertCode : false
@@ -43,6 +38,7 @@ export default class LoginScreen extends React.Component {
   onSendData() {
       let url = `${Config.SERVER_BASE_URL}/users/register`;
       console.log(url);
+
       return fetch(url, {
             method: 'POST',
             headers: {
@@ -63,8 +59,6 @@ export default class LoginScreen extends React.Component {
         });
   }
 
-
-
   onVerifyCode() {
     let res = this.state.codeText === this.state.codeFromApi;
     if (res) {
@@ -73,7 +67,7 @@ export default class LoginScreen extends React.Component {
             userkey: this.state.codeFromApi,
             isAnon: false});
     } else {
-        setState( {codeVerification: false});
+        this.setState( {codeVerification: false});
     }
   }
 
@@ -130,7 +124,6 @@ export default class LoginScreen extends React.Component {
     }
   }
 }
-
 
 LoginScreen.propTypes = {
     saveUser: PropTypes.func
