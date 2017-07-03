@@ -62,8 +62,7 @@ export default class HomeScreen extends React.Component {
 
   render() {
     // FIXME: correggi login e reimplementa
-    //const isAnon = this.props.user.isAnon;
-    const isAnon = false;
+    const isAnon = this.props.user.isAnon;
     let eventsCard = [];
 
     if (isAnon) {
@@ -96,7 +95,8 @@ class EventCard extends Component {
     let cardRows = [];
 
     for(var i=0; i<rows; i++) {
-      cardRows.push(<EventCardRow key={i} images={chunks[i]} />);
+      console.log('row');
+      cardRows.push(<EventCardRow key={'eventCardRow'+i} images={chunks[i]} />);
     };
 
     return (
@@ -122,7 +122,8 @@ class EventCardRow extends Component {
   render () {
     let rowImages = [];
     this.props.images.forEach(function(image, i) {
-      rowImages.push(<EventCardRowImage key={i} image={image} />);
+      console.log('colonnina img');
+      rowImages.push(<EventCardRowImage key={'eventCardRowImage'+i} image={image} />);
     });
 
     return (
