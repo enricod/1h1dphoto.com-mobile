@@ -33,7 +33,6 @@ export default class LoginScreen extends React.Component {
     this.onSendData = this.onSendData.bind(this);
     this.onVerifyCode = this.onVerifyCode.bind(this);
   }
-
  
   onSendData() {
       let url = `${Config.SERVER_BASE_URL}/users/register`;
