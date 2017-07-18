@@ -73,7 +73,7 @@ export default class LoginScreen extends React.Component {
             userkey: this.state.codeFromApi,
             isAnon: false});
     } else {
-        setState( {codeVerification: false});
+        this.setState( {codeVerification: false});
     }
   }
 
