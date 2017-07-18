@@ -22,12 +22,12 @@ export default class EventCard extends Component {
 
   render() {
     let imgInRow = 3;
-    let rows = Math.trunc(this.props.event.images.length / imgInRow);
-    let chunks = _.chunk(this.props.event.images, imgInRow);
+    let rows = Math.trunc(this.props.event.photo.length / imgInRow);
+    let chunks = _.chunk(this.props.event.photo, imgInRow);
     let cardRows = [];
 
     for (var i = 0; i < rows; i++) {
-      cardRows.push(<EventCardRow key={'eventCardRow' + i} images={chunks[i]} />);
+      cardRows.push(<EventCardRow key={'eventCardRow' + i} photo={chunks[i]} />);
     };
 
     return (
@@ -52,8 +52,8 @@ class EventCardRow extends Component {
 
   render() {
     let rowImages = [];
-    this.props.images.forEach(function (image, i) {
-      rowImages.push(<EventCardRowImage key={'eventCardRowImage' + i} uri={image.uri} />);
+    this.props.photo.forEach(function (photo, i) {
+      rowImages.push(<EventCardRowImage key={'eventCardRowImage' + i} uri={photo.uri} />);
     });
 
     return (
