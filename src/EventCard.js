@@ -12,6 +12,8 @@ import {
   CardItem
 } from 'native-base';
 
+import  Lightbox from 'react-native-lightbox';
+
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
@@ -72,7 +74,9 @@ class EventCardRowImage extends Component {
   render() {
     return (
       <Col>
-        <Image source={{uri:this.props.uri}} style={{ height: 100, width: null, flex: 1 }} />
+        <Lightbox>
+          <Image source={{ uri: this.props.uri }} style={{ height: 100, width: null, flex: 1 }} />
+        </Lightbox>
       </Col>
     )
   }

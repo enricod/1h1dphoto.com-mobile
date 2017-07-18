@@ -43,6 +43,7 @@ import {
 import HomeScreen from './src/HomeScreen.js';
 import ProfileScreen from './src/ProfileScreen.js';
 import CameraScreen from './src/CameraScreen.js';
+import LoginScreen from './src/LoginScreen.js';
 
 class MainHeader extends React.Component {
   render() {
@@ -154,7 +155,7 @@ class AppContainer extends React.Component {
   }
 
   getCurrentScreen() {
-    if (this.state.isAnon) {
+    if (this.state.user.isAnon) {
       return <LoginScreen user={this.state.user} saveUser={this.saveUser} saveToken={this.saveToken} />
     } else {
       if (this.state.currentScreen === 'homeScreen') {
