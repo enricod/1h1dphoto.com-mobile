@@ -35,3 +35,21 @@ If issue related to version occured, launch this command:
 ```
 adb uninstall com.onehonedphoto
 ```
+
+# Enviroment
+The default enviroment file is ```.env```. To use different env`file,
+export ENVFILE variable before launch react-native:
+```
+ENVFILE=.env.local react-native run-android
+```
+
+# Android emulator
+List:
+```
+emulator -list-avds
+```
+
+Start:
+```
+emulator @emulatorName
+```

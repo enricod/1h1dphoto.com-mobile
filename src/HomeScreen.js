@@ -4,191 +4,112 @@ import {
   Image,
   TextInput
 } from 'react-native';
-import { Container,
-  Header,
+import {
   Text,
-  Title,
-  Content,
-  Footer,
-  FooterTab,
   Button,
-  Left,
-  Right,
-  Body,
-  Icon,
-  Drawer,
   Grid,
-  Col,
-  Row,
   Card,
   CardItem,
-  H1,
-  H3
+  H1
 } from 'native-base';
 import PropTypes from 'prop-types';
-import LoginScreen from './LoginScreen.js'
+import _ from 'lodash';
+import Config from 'react-native-config'
 
+import LoginScreen from './LoginScreen.js';
+import EventCard from './EventCard.js';
 
 export default class HomeScreen extends React.Component {
-
- 
   constructor(props) {
     super(props);
 
+    this.state = { events: [] }
+
+    this.getEventList = this.getEventList.bind(this);
   }
 
-  
+  componentDidMount() {
+    this.getEventList();
+  }
+
+  getEventList() {
+    let url = `${Config.SERVER_BASE_URL}/events?withimages=true`;
+    console.log(url);
+
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    })
+      .then((response) => {
+        response.json()
+      })
+      .then((responseJson) => {
+        this.setState({ events: responseJson[0].body.events });
+        return responseJson[0].body;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   render() {
     const isAnon = this.props.user.isAnon;
+    let eventsCard = [];
 
-
-   
-      if (isAnon) {
-           return (<LoginScreen saveUser={this.props.saveUser} />);
-      }else {
-        return (
+    if (isAnon) {
+      return (<LoginScreen saveUser={this.props.saveUser} />);
+    } else {
+      this.state.events.forEach(function (event, i) {
+        eventsCard.push(<EventCard key={i} event={event} />);
+      });
+      return (
         <View>
-          <HomeContestCard/>
-          <Card>
-            <CardItem header>
-              <Text> Last contest </Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Grid>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNVvne0sQMrFBfuP3RJN0tKfC76suNiaMZPnnlqYB61DU7OgON'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa1wsJLR9x9xoE934SDrL91wSP6-Ijs-GYVBQbr5Zt3AEqrRVrBg'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-5HnKZc0mpGLF6L69lEAsqiWzBNSuzx4zHwAEmnlsBBPdkSz1eA'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-              </Grid>
-            </CardItem>
-          </Card>
-
-          <Card>    
-            <CardItem header>
-              <Text> Yesterday </Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Grid>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNVvne0sQMrFBfuP3RJN0tKfC76suNiaMZPnnlqYB61DU7OgON'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa1wsJLR9x9xoE934SDrL91wSP6-Ijs-GYVBQbr5Zt3AEqrRVrBg'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-5HnKZc0mpGLF6L69lEAsqiWzBNSuzx4zHwAEmnlsBBPdkSz1eA'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-              </Grid>
-            </CardItem>
-          </Card>
-          
-          <Card>
-            <CardItem header>
-              <Text> Two days ago </Text>
-            </CardItem>
-            <CardItem cardBody>
-              <Grid>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNVvne0sQMrFBfuP3RJN0tKfC76suNiaMZPnnlqYB61DU7OgON'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa1wsJLR9x9xoE934SDrL91wSP6-Ijs-GYVBQbr5Zt3AEqrRVrBg'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-5HnKZc0mpGLF6L69lEAsqiWzBNSuzx4zHwAEmnlsBBPdkSz1eA'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT49_65zIuh_Ab-MBKyCYDcpn303Vvtpyd4acNvaZmeUFrkLtfmWw'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiIKCLeMCELmwVFMR9BruFAx09w5EJYtLIR6_dY_QTPZpPmF35'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                  <Col>
-                    <Image source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCBUQPslEo4gE-ubkbyb_BtdlgZmESU4rJH-Uet0Ey5GckP7V'}} style={{height: 100, width: null, flex: 1}}/>
-                  </Col>
-                </Row>
-              </Grid>
-            </CardItem>
-          </Card>
-
+          <CurrentEventCard />
+          <View>
+            {eventsCard}
+          </View>
         </View>
-        )
-      }
-    
+      )
+    }
   }
 }
 
-HomeScreen.propTypes = {
-    saveUser: PropTypes.func
-}
-
-class HomeContestCard extends Component {
+class CurrentEventCard extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      activeContest: false,
-      nextContest: 6900
+      activeEvent: false,
+      nextEvent: 6900
     }
-    this.selectContest = this.selectContest.bind(this);
+    this.selectEvent = this.selectEvent.bind(this);
   }
 
   componentDidMount() {
     this.timer = setInterval(() => {
-      this.setState({nextContest: this.state.nextContest-1})
+      this.setState({ nextEvent: this.state.nextEvent - 1 })
     },
-    1000);
+      1000);
   }
 
   componentWillUnmount() {
     clearInterval(this.timer);
   }
 
-  selectContest() {
-    //this.props.onContestSelected(screens.cameraScreen);
+  selectEvent() {
+    //this.props.onEventSelected(screens.cameraScreen);
   }
 
   render() {
     let toDisplay = null;
 
-    if (this.state.activeContest) {
-      toDisplay = <Button onPress={this.selectContest}><Text>GO!!!</Text></Button>
+    if (this.state.activeEvent) {
+      toDisplay = <Button onPress={this.selectEvent}><Text>GO!!!</Text></Button>
     } else {
-      toDisplay = <H1>Next contest: {this.state.nextContest.toString()}</H1>
+      toDisplay = <H1>Next event: {this.state.nextEvent.toString()}</H1>
     }
     return (
       <Card>
@@ -203,5 +124,6 @@ class HomeContestCard extends Component {
 }
 
 HomeScreen.PropTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
+  saveUser: PropTypes.func
 }
