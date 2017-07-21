@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   Image,
-  TextInput
+  TextInput,
+  AsyncStorage
 } from 'react-native';
 import {
   Text,
@@ -10,13 +11,13 @@ import {
   Grid,
   Card,
   CardItem,
+  Body,
   H1
 } from 'native-base';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Config from 'react-native-config'
 
-import LoginScreen from './LoginScreen.js';
 import EventCard from './EventCard.js';
 
 export default class HomeScreen extends React.Component {
@@ -26,14 +27,21 @@ export default class HomeScreen extends React.Component {
     this.state = { events: [] }
 
     this.getEventList = this.getEventList.bind(this);
+    this.getUser = this.getUser.bind(this);
   }
 
   componentDidMount() {
-    this.getEventList();
+    this.signin((token) => {
+      this.props.saveToken({
+        token: token
+      });
+      this.setState({ token: token })
+      return this.getEventList();
+    })
   }
 
   getEventList() {
-    let url = `${Config.SERVER_BASE_URL}/events?withimages=true`;
+    let url = `${Config.SERVER_BASE_URL}/api/Events?filter[include]=photo&filter[include]=user`;
     console.log(url);
 
     return fetch(url, {
@@ -41,39 +49,68 @@ export default class HomeScreen extends React.Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': this.state.token.id
       }
     })
-      .then((response) => {
-        response.json()
-      })
-      .then((responseJson) => {
-        this.setState({ events: responseJson[0].body.events });
-        return responseJson[0].body;
+      .then(response => response.json())
+      .then(response => {
+        if (!!response) {
+          this.setState({ events: response });
+        }
+        return;
       })
       .catch((error) => {
         console.error(error);
       });
   }
 
+  signin(cb) {
+    let url = `${Config.SERVER_BASE_URL}/api/AppUsers/signin`;
+    console.log(url);
+
+    this.getUser((user) => {
+
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username: user.username, email: user.email })
+      })
+        .then((response) => response.json())
+        .then(response => {
+          if (!!response) {
+            return cb(response.token);
+          }
+          return;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  }
+
+  getUser(cb) {
+    AsyncStorage.getItem('user', (err, result) => {
+      return cb(JSON.parse(result));
+    });
+  }
+
   render() {
-    const isAnon = this.props.user.isAnon;
     let eventsCard = [];
 
-    if (isAnon) {
-      return (<LoginScreen saveUser={this.props.saveUser} />);
-    } else {
-      this.state.events.forEach(function (event, i) {
-        eventsCard.push(<EventCard key={i} event={event} />);
-      });
-      return (
+    this.state.events.forEach(function (event, i) {
+      eventsCard.push(<EventCard key={i} event={event} />);
+    });
+    return (
+      <View>
+        <CurrentEventCard />
         <View>
-          <CurrentEventCard />
-          <View>
-            {eventsCard}
-          </View>
+          {eventsCard}
         </View>
-      )
-    }
+      </View>
+    )
   }
 }
 

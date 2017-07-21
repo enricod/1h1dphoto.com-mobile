@@ -56,3 +56,8 @@ fastlane/screenshots
 local.properties
 .expo
 .vscode
+
+# Enviroments
+.env
+.env.debug
+.env.production
