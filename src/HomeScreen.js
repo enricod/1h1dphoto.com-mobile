@@ -35,6 +35,7 @@ export default class HomeScreen extends React.Component {
       this.props.saveToken({
         token: token
       });
+      this.setState({ token: token })
       return this.getEventList();
     })
   }
@@ -48,6 +49,7 @@ export default class HomeScreen extends React.Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': this.state.token.id
       }
     })
       .then(response => response.json())
@@ -72,7 +74,7 @@ export default class HomeScreen extends React.Component {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ username: user.username, email: user.email })
       })
