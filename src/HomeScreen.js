@@ -14,6 +14,7 @@ import {
   Body,
   H1
 } from 'native-base';
+
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Config from 'react-native-config'
@@ -27,29 +28,22 @@ export default class HomeScreen extends React.Component {
     this.state = { events: [] }
 
     this.getEventList = this.getEventList.bind(this);
-    this.getUser = this.getUser.bind(this);
   }
 
   componentDidMount() {
-    this.signin((token) => {
-      this.props.saveToken({
-        token: token
-      });
-      this.setState({ token: token })
-      return this.getEventList();
-    })
+    return this.getEventList();
   }
 
   getEventList() {
     let url = `${Config.SERVER_BASE_URL}/api/Events?filter[include]=photo&filter[include]=user`;
-    console.log(url);
+    console.debug(url);
 
     return fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': this.state.token.id
+        'Authorization': global.token.id
       }
     })
       .then(response => response.json())
@@ -64,45 +58,15 @@ export default class HomeScreen extends React.Component {
       });
   }
 
-  signin(cb) {
-    let url = `${Config.SERVER_BASE_URL}/api/AppUsers/signin`;
-    console.log(url);
-
-    this.getUser((user) => {
-
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username: user.username, email: user.email })
-      })
-        .then((response) => response.json())
-        .then(response => {
-          if (!!response) {
-            return cb(response.token);
-          }
-          return;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    });
-  }
-
-  getUser(cb) {
-    AsyncStorage.getItem('user', (err, result) => {
-      return cb(JSON.parse(result));
-    });
-  }
-
   render() {
     let eventsCard = [];
 
-    this.state.events.forEach(function (event, i) {
-      eventsCard.push(<EventCard key={i} event={event} />);
-    });
+    // Attendo caricamento elenco eventi
+    if (this.state.events.length > 0) {
+      this.state.events.forEach(function (event, i) {
+        eventsCard.push(<EventCard key={i} event={event} />);
+      });
+    }
     return (
       <View>
         <CurrentEventCard />
@@ -160,7 +124,4 @@ class CurrentEventCard extends Component {
   }
 }
 
-HomeScreen.PropTypes = {
-  user: PropTypes.object,
-  saveUser: PropTypes.func
-}
+HomeScreen.PropTypes = {}

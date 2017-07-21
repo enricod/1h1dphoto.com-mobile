@@ -26,8 +26,8 @@ export default class LoginScreen extends React.Component {
             email: '',
             codeText: '',
             codeFromApi: '',
-            token: '',
-            insertCode: false
+            insertCode: false,
+            codeVerification: true
         }
 
         this.onSendData = this.onSendData.bind(this);
@@ -49,10 +49,8 @@ export default class LoginScreen extends React.Component {
             .then(response => response.json())
             .then(response => {
                 if (!!response) {
-                    var code = response.code;
-                    var token = response.token;
-                    console.log(code);
-                    this.setState({ insertCode: true, codeFromApi: code, token: token });
+                    console.log(response.code);
+                    this.setState({ insertCode: true, codeFromApi: response.code, token: response.token });
                 }
                 return;
             })
@@ -64,15 +62,16 @@ export default class LoginScreen extends React.Component {
     onVerifyCode() {
         let res = this.state.codeText === this.state.codeFromApi;
         if (res) {
-            this.props.saveUser({
+
+            // Save user and login token
+            this.props.saveLoginInfo({
                 username: this.state.username,
                 email: this.state.email,
                 code: this.state.codeFromApi,
                 isAnon: false
-            });
-            this.props.saveToken({
-                token: this.state.token
-            });
+            },
+                this.state.token
+            );
         } else {
             this.setState({ codeVerification: false });
         }
@@ -133,5 +132,5 @@ export default class LoginScreen extends React.Component {
 }
 
 LoginScreen.propTypes = {
-    saveUser: PropTypes.func
+    saveLoginInfo: PropTypes.func
 }

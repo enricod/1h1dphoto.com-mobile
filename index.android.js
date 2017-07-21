@@ -45,6 +45,8 @@ import ProfileScreen from './src/ProfileScreen.js';
 import CameraScreen from './src/CameraScreen.js';
 import LoginScreen from './src/LoginScreen.js';
 
+import Config from 'react-native-config'
+
 class MainHeader extends React.Component {
   render() {
     return (
@@ -118,55 +120,78 @@ class AppContainer extends React.Component {
 
     this.state = {
       currentScreen: 'homeScreen',
-      user: {
-        username: 'anon',
-        isAnon: true
-      }
+      needRegistration: false,
+      isSignedIn: false,
+      user: {}
     };
 
     // this.storage = new Storage();
     this.changeScreen = this.changeScreen.bind(this);
-    this.saveUser = this.saveUser.bind(this);
-    this.saveToken = this.saveToken.bind(this);
+    this.saveLoginInfo = this.saveLoginInfo.bind(this);
   }
 
-  saveUser(user) {
-    console.log(user);
+  saveLoginInfo(user, token) {
     AsyncStorage.setItem('user', JSON.stringify(user));
-    this.setState({ user: user });
-
-  }
-
-  saveToken(token) {
-    console.log(token);
     AsyncStorage.setItem('token', JSON.stringify(token));
-    this.setState({ token: token });
-
+    // Share token globallu
+    global.token = token;
+    this.setState({ user: user, token: token, needRegistration: false, isSignedIn: true })
   }
 
   componentDidMount() {
+    // Get user, if not present isAnon is true and LoginComponent is displayed
     AsyncStorage.getItem('user')
       .then((value) => {
         if (value) {
           var user = JSON.parse(value);
-          this.setState({ user: user })
+
+          // Login with saved user
+          this.signin(user, (token) => {
+            this.saveLoginInfo(user, token);
+          })
+        } else {
+          this.setState({ needRegistration: true })
         }
       })
   }
 
+  
+  signin(user, cb) {
+    let url = `${Config.SERVER_BASE_URL}/api/AppUsers/signin`;
+    console.debug(url);
+
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username: user.username, email: user.email })
+    })
+      .then((response) => response.json())
+      .then(response => {
+        if (!!response) {
+          return cb(response.token);
+        }
+        return;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   getCurrentScreen() {
-    if (this.state.user.isAnon) {
-      return <LoginScreen user={this.state.user} saveUser={this.saveUser} saveToken={this.saveToken} />
-    } else {
+    if (this.state.needRegistration) {
+      return <LoginScreen user={this.state.user} saveLoginInfo={this.saveLoginInfo} />
+    } else if (this.state.isSignedIn) {
       if (this.state.currentScreen === 'homeScreen') {
-        return <HomeScreen user={this.state.user} saveToken={this.saveToken} />
+        return <HomeScreen user={this.state.user} />
       } else if (this.state.currentScreen === 'cameraScreen') {
         return <CameraScreen user={this.state.user} />
       } else if (this.state.currentScreen === 'profileScreen') {
         return <ProfileScreen user={this.state.user} />
       }
     }
-    return <HomeScreen user={this.state.user} />
   }
 
   changeScreen(screenObj) {
