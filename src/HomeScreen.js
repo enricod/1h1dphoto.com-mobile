@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   View,
   Image,
-  TextInput
+  TextInput,
+  AsyncStorage
 } from 'react-native';
 import {
   Text,
@@ -10,13 +11,14 @@ import {
   Grid,
   Card,
   CardItem,
+  Body,
   H1
 } from 'native-base';
+
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Config from 'react-native-config'
 
-import LoginScreen from './LoginScreen.js';
 import EventCard from './EventCard.js';
 
 export default class HomeScreen extends React.Component {
@@ -29,26 +31,27 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.getEventList();
+    return this.getEventList();
   }
 
   getEventList() {
-    let url = `${Config.SERVER_BASE_URL}/events?withimages=true`;
-    console.log(url);
+    let url = `${Config.SERVER_BASE_URL}/api/Events?filter[include]=photo&filter[include]=user`;
+    console.debug(url);
 
     return fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': global.token.id
       }
     })
-      .then((response) => {
-        response.json()
-      })
-      .then((responseJson) => {
-        this.setState({ events: responseJson[0].body.events });
-        return responseJson[0].body;
+      .then(response => response.json())
+      .then(response => {
+        if (!!response) {
+          this.setState({ events: response });
+        }
+        return;
       })
       .catch((error) => {
         console.error(error);
@@ -56,24 +59,22 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
-    const isAnon = this.props.user.isAnon;
     let eventsCard = [];
 
-    if (isAnon) {
-      return (<LoginScreen saveUser={this.props.saveUser} />);
-    } else {
+    // Attendo caricamento elenco eventi
+    if (this.state.events.length > 0) {
       this.state.events.forEach(function (event, i) {
         eventsCard.push(<EventCard key={i} event={event} />);
       });
-      return (
-        <View>
-          <CurrentEventCard />
-          <View>
-            {eventsCard}
-          </View>
-        </View>
-      )
     }
+    return (
+      <View>
+        <CurrentEventCard />
+        <View>
+          {eventsCard}
+        </View>
+      </View>
+    )
   }
 }
 
@@ -123,7 +124,4 @@ class CurrentEventCard extends Component {
   }
 }
 
-HomeScreen.PropTypes = {
-  user: PropTypes.object,
-  saveUser: PropTypes.func
-}
+HomeScreen.PropTypes = {}

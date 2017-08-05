@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 import {
- AppRegistry,
+  AppRegistry,
   Dimensions,
   StyleSheet,
   TouchableHighlight,
@@ -17,7 +17,8 @@ import {
   AsyncStorage
 } from 'react-native';
 
-import { Container,
+import {
+  Container,
   Header,
   Text,
   Title,
@@ -38,49 +39,16 @@ import { Container,
   H1,
   H3
 } from 'native-base';
-import Camera from 'react-native-camera';
 
 import HomeScreen from './src/HomeScreen.js';
 import ProfileScreen from './src/ProfileScreen.js';
+import CameraScreen from './src/CameraScreen.js';
+import LoginScreen from './src/LoginScreen.js';
 
-class CameraScreen extends React.Component {
-  render() {
-    return (
-      <CameraComponent />
-    );
-  }
-}
-
-class CameraComponent extends Component {
-  render() {
-    return (
-      <View style={styles.container} >
-        <Camera
-          ref={(cam) => {
-            this.camera = cam;
-          }}
-          style={styles.preview}
-          aspect={Camera.constants.Aspect.fill}>
-          <Button onPress={this.takePicture.bind(this)}>
-            <Text>CAPTURE</Text>
-          </Button>
-        </Camera>
-
-      </View>
-    );
-  }
-
-  takePicture() {
-    const options = {};
-    //options.location = ...
-    this.camera.capture({metadata: options})
-      .then((data) => console.log(data))
-      .catch(err => console.error(err));
-  }
-}
+import Config from 'react-native-config'
 
 class MainHeader extends React.Component {
-  render () {
+  render() {
     return (
       <Header>
         <Left>
@@ -104,19 +72,18 @@ class MainFooter extends React.Component {
 
     this.onChange = this.onChange.bind(this);
   }
-  onChange(screen) 
-  {
-      this.props.onChangeScreen(screen);
+  onChange(screen) {
+    this.props.onChangeScreen(screen);
   }
-  render () {
+  render() {
     return (
-        <Footer>
-          <FooterTab>
-            <FooterBtn onChange = {this.onChange} title='Home' screen='homeScreen' icon='navigate' />
-            <FooterBtn onChange = {this.onChange} title='Camera' screen='cameraScreen' icon='camera' />
-            <FooterBtn onChange = {this.onChange} title='My photos' screen='profileScreen' icon='person' />
-          </FooterTab>
-        </Footer>
+      <Footer>
+        <FooterTab>
+          <FooterBtn onChange={this.onChange} title='Home' screen='homeScreen' icon='navigate' />
+          <FooterBtn onChange={this.onChange} title='Camera' screen='cameraScreen' icon='camera' />
+          <FooterBtn onChange={this.onChange} title='My photos' screen='profileScreen' icon='person' />
+        </FooterTab>
+      </Footer>
     );
   }
 }
@@ -128,12 +95,12 @@ class FooterBtn extends Component {
   }
 
   onChange() {
-      this.props.onChange(this.props.screen);
-  } 
-  
+    this.props.onChange(this.props.screen);
+  }
+
   render() {
     return (
-      <Button onPress = {this.onChange} >
+      <Button onPress={this.onChange} >
         <Icon name={this.props.icon} />
         <Text>{this.props.title}</Text>
       </Button>
@@ -153,48 +120,83 @@ class AppContainer extends React.Component {
 
     this.state = {
       currentScreen: 'homeScreen',
-      user: {
-        username:'anon',
-        isAnon: true
-      }
+      needRegistration: false,
+      isSignedIn: false,
+      user: {}
     };
 
     // this.storage = new Storage();
     this.changeScreen = this.changeScreen.bind(this);
-    this.saveUser = this.saveUser.bind(this);
+    this.saveLoginInfo = this.saveLoginInfo.bind(this);
   }
 
-  saveUser(user) {
-    console.log(user);
-      AsyncStorage.setItem('user', JSON.stringify(user));
-      this.setState( {user: user});
+  saveLoginInfo(user, token) {
+    AsyncStorage.setItem('user', JSON.stringify(user));
+    AsyncStorage.setItem('token', JSON.stringify(token));
+    // Share token globallu
+    global.token = token;
+    this.setState({ user: user, token: token, needRegistration: false, isSignedIn: true })
   }
 
   componentDidMount() {
+    // Get user, if not present isAnon is true and LoginComponent is displayed
     AsyncStorage.getItem('user')
       .then((value) => {
-          if (value) {
-            var user = JSON.parse(value);
-            this.setState( {user: user} )
-          } 
-        })
+        if (value) {
+          var user = JSON.parse(value);
+
+          // Login with saved user
+          this.signin(user, (token) => {
+            this.saveLoginInfo(user, token);
+          })
+        } else {
+          this.setState({ needRegistration: true })
+        }
+      })
   }
+
   
-   getCurrentScreen() {
-     if (this.state.currentScreen === 'homeScreen') {
-       return <HomeScreen user={this.state.user} saveUser={this.saveUser} />
-     } else if (this.state.currentScreen === 'cameraScreen') {
-       return <CameraScreen user={this.state.user} />
-     } else if (this.state.currentScreen === 'profileScreen') {
-       return <ProfileScreen user={this.state.user} />
-     }
-     
-     return <HomeScreen user={this.state.user} />
+  signin(user, cb) {
+    let url = `${Config.SERVER_BASE_URL}/api/AppUsers/signin`;
+    console.debug(url);
+
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username: user.username, email: user.email })
+    })
+      .then((response) => response.json())
+      .then(response => {
+        if (!!response) {
+          return cb(response.token);
+        }
+        return;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  getCurrentScreen() {
+    if (this.state.needRegistration) {
+      return <LoginScreen user={this.state.user} saveLoginInfo={this.saveLoginInfo} />
+    } else if (this.state.isSignedIn) {
+      if (this.state.currentScreen === 'homeScreen') {
+        return <HomeScreen user={this.state.user} />
+      } else if (this.state.currentScreen === 'cameraScreen') {
+        return <CameraScreen user={this.state.user} />
+      } else if (this.state.currentScreen === 'profileScreen') {
+        return <ProfileScreen user={this.state.user} />
+      }
+    }
   }
 
   changeScreen(screenObj) {
     // console.log(e);
-    this.setState({currentScreen: screenObj});
+    this.setState({ currentScreen: screenObj });
   }
 
   render() {
@@ -204,29 +206,18 @@ class AppContainer extends React.Component {
         <Content>
           {this.getCurrentScreen()}
         </Content>
-        <MainFooter onChangeScreen = {this.changeScreen}/>
+        <MainFooter onChangeScreen={this.changeScreen} />
       </Container>
     );
   }
 }
 
 class OnehOnedphoto extends React.Component {
-  render () {
-   return (
+  render() {
+    return (
       <AppContainer />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    height: 500
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  }
-});
 
 AppRegistry.registerComponent('OnehOnedphoto', () => OnehOnedphoto);
