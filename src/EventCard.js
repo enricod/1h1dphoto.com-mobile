@@ -22,7 +22,8 @@ export default class EventCard extends Component {
 
   render() {
     let imgInRow = 3;
-    let rows = Math.trunc(this.props.event.photo.length / imgInRow);
+    let imgs = (this.props.event.photo.length < imgInRow) ? this.props.event.photo.length :  imgInRow;
+    let rows = Math.ceil(this.props.event.photo.length / imgInRow);
     let chunks = _.chunk(this.props.event.photo, imgInRow);
     let cardRows = [];
 
@@ -72,7 +73,7 @@ class EventCardRowImage extends Component {
   render() {
     return (
       <Col>
-        <Image source={{ uri: this.props.uri }} style={{ height: 100, width: null, flex: 1 }} />
+        <Image source={{ uri: this.props.uri }} style={{ height: 100, flex: 1 }} />
       </Col>
     )
   }

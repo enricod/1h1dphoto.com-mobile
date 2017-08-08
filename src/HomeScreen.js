@@ -70,9 +70,7 @@ export default class HomeScreen extends React.Component {
     return (
       <View>
         <CurrentEventCard />
-        <View>
-          {eventsCard}
-        </View>
+        {eventsCard}
       </View>
     )
   }
