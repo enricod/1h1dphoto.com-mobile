@@ -87,7 +87,7 @@ export default class LoginScreen extends React.Component {
         }
         if (this.state.insertCode) {
             return (
-                <Content>
+                <View>
                     <Form>
                         <Item inlineLabel>
                             <Label>Code</Label>
@@ -100,7 +100,7 @@ export default class LoginScreen extends React.Component {
                     <Button full onPress={this.onVerifyCode}
                         accessibilityLabel="" ><Text>VERIFICA</Text>
                     </Button>
-                </Content>
+                </View>
             )
         } else {
             return (

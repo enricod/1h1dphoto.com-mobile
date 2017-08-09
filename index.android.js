@@ -31,13 +31,7 @@ import {
   Body,
   Icon,
   Drawer,
-  Grid,
-  Col,
-  Row,
-  Card,
-  CardItem,
-  H1,
-  H3
+  StyleProvider
 } from 'native-base';
 
 import HomeScreen from './src/HomeScreen.js';
@@ -47,12 +41,19 @@ import LoginScreen from './src/LoginScreen.js';
 
 import Config from 'react-native-config'
 
+import Sidebar from './src/SideBar';
+
+import getTheme from './native-base-theme/components';
+import material from './native-base-theme/variables/material';
+import common from './native-base-theme/variables/commonColor';
+import platform from './native-base-theme/variables/commonColor';
+
 class MainHeader extends React.Component {
   render() {
     return (
       <Header>
         <Left>
-          <Button transparent>
+          <Button transparent onPress={() => this.props.openDrawer()} >
             <Icon name='menu' />
           </Button>
         </Left>
@@ -155,7 +156,7 @@ class AppContainer extends React.Component {
       })
   }
 
-  
+
   signin(user, cb) {
     let url = `${Config.SERVER_BASE_URL}/api/AppUsers/signin`;
     console.debug(url);
@@ -199,15 +200,30 @@ class AppContainer extends React.Component {
     this.setState({ currentScreen: screenObj });
   }
 
+  closeDrawer = () => {
+    this.drawer._root.close()
+  };
+  openDrawer = () => {
+    this.drawer._root.open()
+  };
+
   render() {
     return (
-      <Container>
-        <MainHeader />
-        <Content>
-          {this.getCurrentScreen()}
-        </Content>
-        <MainFooter onChangeScreen={this.changeScreen} />
-      </Container>
+      <StyleProvider style={getTheme(platform)}>
+        <Drawer
+          ref={(ref) => { this.drawer = ref; }}
+          content={<Sidebar />}
+          onClose={() => this.closeDrawer()} >
+
+          <Container>
+            <MainHeader openDrawer={this.openDrawer.bind(this)} />
+            <Content>
+              {this.getCurrentScreen()}
+            </Content>
+            <MainFooter onChangeScreen={this.changeScreen} />
+          </Container>
+        </Drawer>
+      </StyleProvider>
     );
   }
 }
