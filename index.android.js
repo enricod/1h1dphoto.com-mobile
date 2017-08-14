@@ -20,7 +20,8 @@ import {
   Right,
   Body,
   Icon,
-  Drawer
+  Drawer,
+  StyleProvider
 } from 'native-base';
 
 import MainHeader from './src/MainHeader';
@@ -33,6 +34,9 @@ import LoginScreen from './src/LoginScreen';
 import Sidebar from './src/SideBar';
 
 import Config from 'react-native-config'
+
+import getTheme from './native-base-theme/components';
+import onehonedayphotoColor from './native-base-theme/variables/onehonedayphotoColor';
 
 /**
  * contiene stato globale applicazione - per ora informazioni 
@@ -153,9 +157,11 @@ class AppContainer extends React.Component {
 class OnehOnedphoto extends React.Component {
   render() {
     return (
-      <Root>
-        <AppContainer />
-      </Root>
+      <StyleProvider style={getTheme(onehonedayphotoColor)}>
+        <Root>
+          <AppContainer />
+        </Root>
+      </StyleProvider>
     );
   }
 }
