@@ -3,18 +3,21 @@ import {
   AppRegistry,
   Dimensions,
   StyleSheet,
-  Text,
   TouchableHighlight,
   View
 } from 'react-native';
+import {
+  Content,
+  Text
+} from 'native-base';
 import PropTypes from 'prop-types';
 
 export default class ProfileScreen extends React.Component {
   render() {
     return (
-      <View>
+      <Content padder>
         <Text>Ciao ezio</Text>
-      </View>
+      </Content>
     );
   }
 }

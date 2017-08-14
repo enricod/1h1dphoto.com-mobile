@@ -5,6 +5,7 @@ import {
   StyleSheet
 } from 'react-native';
 import {
+  Content,
   Text,
   Button
 } from 'native-base';
@@ -15,7 +16,9 @@ import Camera from 'react-native-camera';
 export default class CameraScreen extends React.Component {
   render() {
     return (
-      <CameraComponent />
+      <Content>
+        <CameraComponent />
+      </Content>
     );
   }
 }

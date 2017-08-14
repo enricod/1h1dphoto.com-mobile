@@ -1,113 +1,38 @@
 /**
  * OnehOnedphoto
  */
-
-'use strict';
-
-<script src="http://localhost:8097"></script>
-
 import React, { Component } from 'react';
+
 import {
   AppRegistry,
-  Dimensions,
-  StyleSheet,
-  TouchableHighlight,
-  View,
-  Image,
   AsyncStorage
 } from 'react-native';
 
 import {
+  Root,
   Container,
   Header,
   Text,
   Title,
   Content,
-  Footer,
-  FooterTab,
   Button,
   Left,
   Right,
   Body,
   Icon,
-  Drawer,
-  StyleProvider
+  Drawer
 } from 'native-base';
 
-import HomeScreen from './src/HomeScreen.js';
-import ProfileScreen from './src/ProfileScreen.js';
-import CameraScreen from './src/CameraScreen.js';
-import LoginScreen from './src/LoginScreen.js';
+import MainHeader from './src/MainHeader';
+import MainFooter from './src/MainFooter';
 
-import Config from 'react-native-config'
-
+import HomeScreen from './src/HomeScreen';
+import ProfileScreen from './src/ProfileScreen';
+import CameraScreen from './src/CameraScreen';
+import LoginScreen from './src/LoginScreen';
 import Sidebar from './src/SideBar';
 
-import getTheme from './native-base-theme/components';
-import material from './native-base-theme/variables/material';
-import common from './native-base-theme/variables/commonColor';
-import platform from './native-base-theme/variables/commonColor';
-
-class MainHeader extends React.Component {
-  render() {
-    return (
-      <Header>
-        <Left>
-          <Button transparent onPress={() => this.props.openDrawer()} >
-            <Icon name='menu' />
-          </Button>
-        </Left>
-        <Body>
-          <Title>OnehOnedphoto</Title>
-        </Body>
-        <Right />
-      </Header>
-    );
-  }
-}
-
-class MainFooter extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.onChange = this.onChange.bind(this);
-  }
-  onChange(screen) {
-    this.props.onChangeScreen(screen);
-  }
-  render() {
-    return (
-      <Footer>
-        <FooterTab>
-          <FooterBtn onChange={this.onChange} title='Home' screen='homeScreen' icon='navigate' />
-          <FooterBtn onChange={this.onChange} title='Camera' screen='cameraScreen' icon='camera' />
-          <FooterBtn onChange={this.onChange} title='My photos' screen='profileScreen' icon='person' />
-        </FooterTab>
-      </Footer>
-    );
-  }
-}
-
-class FooterBtn extends Component {
-  constructor(props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-  }
-
-  onChange() {
-    this.props.onChange(this.props.screen);
-  }
-
-  render() {
-    return (
-      <Button onPress={this.onChange} >
-        <Icon name={this.props.icon} />
-        <Text>{this.props.title}</Text>
-      </Button>
-    );
-  }
-}
+import Config from 'react-native-config'
 
 /**
  * contiene stato globale applicazione - per ora informazioni 
@@ -155,7 +80,6 @@ class AppContainer extends React.Component {
         }
       })
   }
-
 
   signin(user, cb) {
     let url = `${Config.SERVER_BASE_URL}/api/AppUsers/signin`;
@@ -209,21 +133,19 @@ class AppContainer extends React.Component {
 
   render() {
     return (
-      <StyleProvider style={getTheme(platform)}>
-        <Drawer
-          ref={(ref) => { this.drawer = ref; }}
-          content={<Sidebar />}
-          onClose={() => this.closeDrawer()} >
+      <Drawer
+        ref={(ref) => { this.drawer = ref; }}
+        content={<Sidebar />}
+        onClose={() => this.closeDrawer()} >
 
-          <Container>
-            <MainHeader openDrawer={this.openDrawer.bind(this)} />
-            <Content>
-              {this.getCurrentScreen()}
-            </Content>
-            <MainFooter onChangeScreen={this.changeScreen} />
-          </Container>
-        </Drawer>
-      </StyleProvider>
+        <Container padder>
+          <MainHeader openDrawer={this.openDrawer.bind(this)} />
+
+          {this.getCurrentScreen()}
+
+          <MainFooter onChangeScreen={this.changeScreen} />
+        </Container>
+      </Drawer>
     );
   }
 }
@@ -231,7 +153,9 @@ class AppContainer extends React.Component {
 class OnehOnedphoto extends React.Component {
   render() {
     return (
-      <AppContainer />
+      <Root>
+        <AppContainer />
+      </Root>
     );
   }
 }

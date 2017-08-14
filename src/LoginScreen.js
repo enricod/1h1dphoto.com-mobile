@@ -5,13 +5,13 @@ import {
     TextInput
 } from 'react-native';
 import {
+    Content,
     Text,
     Button,
     Form,
     Input,
     Item,
-    Label,
-    Content
+    Label
 } from 'native-base';
 import PropTypes from 'prop-types';
 import Config from 'react-native-config'
@@ -87,7 +87,7 @@ export default class LoginScreen extends React.Component {
         }
         if (this.state.insertCode) {
             return (
-                <View>
+                <Content padder>
                     <Form>
                         <Item inlineLabel>
                             <Label>Code</Label>
@@ -100,11 +100,11 @@ export default class LoginScreen extends React.Component {
                     <Button full onPress={this.onVerifyCode}
                         accessibilityLabel="" ><Text>VERIFICA</Text>
                     </Button>
-                </View>
+                </Content>
             )
         } else {
             return (
-                <Content>
+                <Content padder>
                     <Form>
                         <Item inlineLabel>
                             <Label>Username</Label>

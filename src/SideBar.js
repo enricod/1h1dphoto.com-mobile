@@ -11,7 +11,7 @@ export default class Sidebar extends Component {
   render() {
     return (
       <Container>
-      <Content style={{ backgroundColor: '#FFFFFF' }}>
+      <Content padder style={{ backgroundColor: '#FFFFFF' }}>
         <Button light><Text> Logout </Text></Button>
       </Content>
       </Container>

@@ -6,6 +6,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import {
+  Content,
   Text,
   Button,
   Grid,
@@ -68,10 +69,10 @@ export default class HomeScreen extends React.Component {
       });
     }
     return (
-      <View>
+      <Content padder>
         <CurrentEventCard />
         {eventsCard}
-      </View>
+      </Content>
     )
   }
 }
