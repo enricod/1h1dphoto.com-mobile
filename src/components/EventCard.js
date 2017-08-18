@@ -18,6 +18,11 @@ import _ from 'lodash';
 export default class EventCard extends Component {
   constructor(props) {
     super(props);
+    this.openEventPhoto = this.openEventPhoto.bind(this);
+  }
+
+  openEventPhoto() {
+    this.props.openPhotoViewer(this.props.event.id);
   }
 
   render() {
@@ -34,7 +39,9 @@ export default class EventCard extends Component {
     return (
       <Card>
         <CardItem header>
-          <Text>{this.props.event.name}</Text>
+          <Button onPress={this.openEventPhoto}>
+            <Text>{this.props.event.name}</Text>
+          </Button>
         </CardItem>
         <CardItem cardBody>
           <Grid>

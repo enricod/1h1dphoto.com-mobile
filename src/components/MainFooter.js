@@ -10,19 +10,15 @@ import {
 export default class MainFooter extends React.Component {
     constructor(props) {
         super(props);
+    }
 
-        this.onChange = this.onChange.bind(this);
-    }
-    onChange(screen) {
-        this.props.onChangeScreen(screen);
-    }
     render() {
         return (
             <Footer>
                 <FooterTab>
-                    <FooterBtn onChange={this.onChange} title='Home' screen='homeScreen' icon='navigate' />
-                    <FooterBtn onChange={this.onChange} title='Camera' screen='cameraScreen' icon='camera' />
-                    <FooterBtn onChange={this.onChange} title='My photos' screen='profileScreen' icon='person' />
+                    <FooterBtn onChange={this.props.onChangeScreen} title='Home' screen='homeScreen' icon='navigate' />
+                    <FooterBtn onChange={this.props.onChangeScreen} title='Camera' screen='cameraScreen' icon='camera' />
+                    <FooterBtn onChange={this.props.onChangeScreen} title='My photos' screen='profileScreen' icon='person' />
                 </FooterTab>
             </Footer>
         );

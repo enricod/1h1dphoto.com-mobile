@@ -20,9 +20,10 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Config from 'react-native-config'
 
-import EventCard from './EventCard.js';
+import EventCard from '../components/EventCard.js';
 
 export default class HomeScreen extends React.Component {
+
   constructor(props) {
     super(props);
 
@@ -63,13 +64,13 @@ export default class HomeScreen extends React.Component {
     let eventsCard = [];
 
     // Attendo caricamento elenco eventi
-    if (this.state.events.length > 0) {
-      this.state.events.forEach(function (event, i) {
-        eventsCard.push(<EventCard key={i} event={event} />);
-      });
+    for (let i=0;i < this.state.events.length; i++) {
+      eventsCard.push(<EventCard key={i} event={this.state.events[i]} openPhotoViewer={this.props.openPhotoViewer}/>);
     }
+
     return (
       <Content padder>
+      
         <CurrentEventCard />
         {eventsCard}
       </Content>

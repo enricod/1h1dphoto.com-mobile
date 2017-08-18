@@ -51,7 +51,7 @@ emulator -list-avds
 
 Start:
 ```
-emulator @emulatorName
+emulator @${emulatorName}
 ```
 
 # React native debugger
