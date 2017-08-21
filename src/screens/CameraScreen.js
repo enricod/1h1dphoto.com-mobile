@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import {
   Image,
   View,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native';
 import {
   Content,
-  Text,
-  Button
+  Button,
+  Text
 } from 'native-base';
 
 import PropTypes from 'prop-types';
@@ -26,19 +27,14 @@ export default class CameraScreen extends React.Component {
 class CameraComponent extends Component {
   render() {
     return (
-      <View style={styles.container} >
-        <Camera
-          ref={(cam) => {
-            this.camera = cam;
-          }}
-          style={styles.preview}
-          aspect={Camera.constants.Aspect.fill}>
-          <Button onPress={this.takePicture.bind(this)}>
-            <Text>CAPTURE</Text>
-          </Button>
-        </Camera>
-
-      </View>
+      <Camera
+        ref={(cam) => {
+          this.camera = cam;
+        }}
+        style={styles.preview}
+        aspect={Camera.constants.Aspect.fill}>
+        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
+      </Camera>
     );
   }
 
@@ -52,12 +48,19 @@ class CameraComponent extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    height: 500
-  },
   preview: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width
+  },
+  capture: {
+    flex: 0,
+    backgroundColor: '#4286f4',
+    borderRadius: 5,
+    color: '#000',
+    padding: 10,
+    margin: 40
   }
 });

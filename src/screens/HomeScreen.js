@@ -37,7 +37,7 @@ export default class HomeScreen extends React.Component {
   }
 
   getEventList() {
-    let url = `${Config.SERVER_BASE_URL}/api/Events?filter[include]=photo&filter[include]=user`;
+    let url = `${Config.SERVER_BASE_URL}/api/events/summary/list`;
     console.debug(url);
 
     return fetch(url, {
@@ -45,7 +45,7 @@ export default class HomeScreen extends React.Component {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': global.token.id
+        'Authorization': global.appToken
       }
     })
       .then(response => response.json())
@@ -64,13 +64,13 @@ export default class HomeScreen extends React.Component {
     let eventsCard = [];
 
     // Attendo caricamento elenco eventi
-    for (let i=0;i < this.state.events.length; i++) {
-      eventsCard.push(<EventCard key={i} event={this.state.events[i]} openPhotoViewer={this.props.openPhotoViewer}/>);
+    for (let i = 0; i < this.state.events.length; i++) {
+      eventsCard.push(<EventCard key={i} event={this.state.events[i]} openPhotoViewer={this.props.openPhotoViewer} />);
     }
 
     return (
       <Content padder>
-      
+
         <CurrentEventCard />
         {eventsCard}
       </Content>
@@ -124,4 +124,6 @@ class CurrentEventCard extends Component {
   }
 }
 
-HomeScreen.PropTypes = {}
+HomeScreen.PropTypes = {
+  openPhotoViewer: PropTypes.func
+}
