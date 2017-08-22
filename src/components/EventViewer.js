@@ -20,9 +20,11 @@ export default class EventViewer extends Component {
 
     constructor(props) {
         super(props);
+        this.event = this.props.navigation.state.params.event;
         this.state = {
             showPhotos: false,
-            event: this.props.navigation.state.params.event
+            event: this.event,
+            photos: this.event.Submissions
         }
         this.openPhotoViewer = this.openPhotoViewer.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -34,8 +36,8 @@ export default class EventViewer extends Component {
         };
     };
 
-    openPhotoViewer() {
-        this.setState({ showPhotos: true })
+    openPhotoViewer(index) {
+        this.setState({ showPhotos: true, imageArrayIndex: index })
     }
 
     closeModal() {
@@ -46,27 +48,28 @@ export default class EventViewer extends Component {
         let componentsToDisplay = null;
 
         if (this.state.showPhotos) {
-            let photos = [];
-            for (let i = 0; i < this.state.event.Submissions.length; i++) {
-                photos.push({ url: this.state.event.Submissions[i].ImageName });
+            let photosArray = [];
+            for (let i = 0; i < this.state.photos.length; i++) {
+                photosArray.push({ url: this.state.photos[i].ImageName });
             }
-            componentsToDisplay = <PhotoViewer closeModal={this.closeModal} photos={photos}/>;
+            componentsToDisplay = <PhotoViewer closeModal={this.closeModal} 
+            photos={photosArray} 
+            imageArrayIndex={this.state.imageArrayIndex}/>;
         } else {
 
-            let photos = [];
-            for (let i = 0; i < this.state.event.Submissions.length; i++) {
-                photos.push(<Row><Image key={'eventImage' + i} source={{ uri: this.state.event.Submissions[i].ImageName }} style={{ height: 100, flex: 1 }}></Image></Row>);
+            let photosComponents = [];
+            for (let i = 0; i < this.state.photos.length; i++) {
+                photosComponents.push(
+                    <TouchableHighlight onPress={() => this.openPhotoViewer(i)} underlayColor="white">
+                        <Image key={'eventImage' + i} source={{ uri: this.state.photos[i].ImageName }} style={{ height: 100, flex: 1 }} ></Image>
+                    </TouchableHighlight>
+                );
             }
 
             componentsToDisplay = <Content padder>
-                <Text>{this.state.event.Start}</Text>
-                <Text>{this.state.event.End}</Text>
-                <TouchableHighlight onPress={this.openPhotoViewer}>
-                    <Grid>
-                        {photos}
-
-                    </Grid>
-                </TouchableHighlight>
+                <Text>Start: {this.state.event.Start}</Text>
+                <Text>End: {this.state.event.End}</Text>
+                {photosComponents}
             </Content>
         }
 

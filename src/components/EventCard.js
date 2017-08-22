@@ -38,9 +38,8 @@ export default class EventCard extends Component {
     };
 
     return (
-      <TouchableHighlight onPress={this.openEventViewer}>
-      <Card>
-        
+      <TouchableHighlight onPress={this.openEventViewer} underlayColor="white">
+        <Card>
           <CardItem header>
             <Text>{this.props.event.Name}</Text>
           </CardItem>
@@ -49,8 +48,7 @@ export default class EventCard extends Component {
               {cardRows}
             </Grid>
           </CardItem>
-        
-      </Card>
+        </Card>
       </TouchableHighlight>
     )
   }

@@ -19,7 +19,9 @@ export default class PhotoViewer extends Component {
     render() {
         return (
             <Modal visible={true} transparent={true}>
-                <ImageViewer imageUrls={this.props.photos} onClick={this.props.closeModal}/>
+                <ImageViewer imageUrls={this.props.photos}
+                    onClick={this.props.closeModal} onCancel={this.props.closeModal}
+                    index={this.props.imageArrayIndex} />
             </Modal>
         );
     }
