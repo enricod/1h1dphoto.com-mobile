@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
-  Image
+  Image,
+  TouchableHighlight
 } from 'react-native';
 import {
   Text,
@@ -37,18 +38,20 @@ export default class EventCard extends Component {
     };
 
     return (
+      <TouchableHighlight onPress={this.openEventViewer}>
       <Card>
-        <CardItem header>
-          <Button onPress={this.openEventViewer}>
+        
+          <CardItem header>
             <Text>{this.props.event.Name}</Text>
-          </Button>
-        </CardItem>
-        <CardItem cardBody>
-          <Grid>
-            {cardRows}
-          </Grid>
-        </CardItem>
+          </CardItem>
+          <CardItem cardBody>
+            <Grid>
+              {cardRows}
+            </Grid>
+          </CardItem>
+        
       </Card>
+      </TouchableHighlight>
     )
   }
 }
