@@ -29,35 +29,12 @@ export default class HomeScreen extends React.Component {
 
     this.state = { events: [] }
 
-    this.getEventList = this.getEventList.bind(this);
   }
 
   componentDidMount() {
-    return this.getEventList();
-  }
-
-  getEventList() {
-    let url = `${Config.SERVER_BASE_URL}/api/events/summary/list`;
-    console.debug(url);
-
-    return fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': global.appToken
-      }
-    })
-      .then(response => response.json())
-      .then(response => {
-        if (!!response) {
-          this.setState({ events: response });
-        }
-        return;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    return this.props.getEventList((events) => {
+      this.setState({ events: events });
+    });
   }
 
   render() {
@@ -65,7 +42,7 @@ export default class HomeScreen extends React.Component {
 
     // Attendo caricamento elenco eventi
     for (let i = 0; i < this.state.events.length; i++) {
-      eventsCard.push(<EventCard key={i} event={this.state.events[i]} openPhotoViewer={this.props.openPhotoViewer} />);
+      eventsCard.push(<EventCard key={i} event={this.state.events[i]} openEventViewer={this.props.openEventViewer} />);
     }
 
     return (
@@ -125,5 +102,5 @@ class CurrentEventCard extends Component {
 }
 
 HomeScreen.PropTypes = {
-  openPhotoViewer: PropTypes.func
+  openEventViewer: PropTypes.func
 }

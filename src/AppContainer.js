@@ -24,13 +24,14 @@ export default class AppContainer extends React.Component {
 
         this.state = {
             needRegistration: false,
-            user: {}
+            userInstance: {}
         };
 
         // this.storage = new Storage();
         this.changeScreen = this.changeScreen.bind(this);
         this.saveLoginInfo = this.saveLoginInfo.bind(this);
-        this.openPhotoViewer = this.openPhotoViewer.bind(this)
+        this.openEventViewer = this.openEventViewer.bind(this);
+        this.getSummaryEventList = this.getSummaryEventList.bind(this);
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -49,23 +50,29 @@ export default class AppContainer extends React.Component {
         };
     };
 
+    /**
+     * Save userInstance
+     * @param {*} user 
+     * @param {*} appToken 
+     */
     saveLoginInfo(user, appToken) {
-        AsyncStorage.setItem('user', JSON.stringify(user));
-        AsyncStorage.setItem('appToken', JSON.stringify(appToken));
-        // Share token globallu
-        global.appToken = appToken;
-        this.setState({ user: user, appToken: appToken, needRegistration: false, currentScreen: 'homeScreen' })
+        var userInstance = {
+            user: user,
+            appToken: appToken
+        }
+        AsyncStorage.setItem('userInstance', JSON.stringify(userInstance));
+        this.setState({ userInstance: userInstance, needRegistration: false, currentScreen: 'homeScreen' })
     }
 
     componentDidMount() {
-        // Get user, if not present LoginComponent is displayed
-        AsyncStorage.getItem('user')
-            .then((user) => {
-                if (user) {
+        // Get logged user instance (model+appToken), if not present LoginComponent is displayed
+        AsyncStorage.getItem('userInstance')
+            .then((userInstance) => {
+                if (userInstance) {
+                    this.setState({ userInstance: JSON.parse(userInstance), needRegistration: false, currentScreen: 'homeScreen' })
                     this.props.navigation.setParams({
                         currentScreen: 'homeScreen'
                     });
-
                 } else {
                     this.setState({ needRegistration: true, currentScreen: 'loginScreen' })
                     this.props.navigation.setParams({
@@ -77,19 +84,25 @@ export default class AppContainer extends React.Component {
 
     getCurrentScreen() {
         if (this.state.needRegistration) {
-            return <LoginScreen user={this.state.user} saveLoginInfo={this.saveLoginInfo} />
+            return <LoginScreen saveLoginInfo={this.saveLoginInfo} />
         } else {
-            let screenWithFooter = [];
 
-            if (this.state.currentScreen === 'homeScreen') {
-                screenWithFooter.push(<HomeScreen key={'homeScreen'} user={this.state.user} openPhotoViewer={this.openPhotoViewer} />);
-            } else if (this.state.currentScreen === 'cameraScreen') {
-                screenWithFooter.push(<CameraScreen key={'cameraScreen'} user={this.state.user} />);
-            } else if (this.state.currentScreen === 'profileScreen') {
-                screenWithFooter.push(<ProfileScreen key={'profileScreen'} user={this.state.user} />);
+            if (this.state.currentScreen) {
+                let screenWithFooter = [];
+
+                if (this.state.currentScreen === 'homeScreen') {
+                    screenWithFooter.push(<HomeScreen key={'homeScreen'} userInstance={this.state.userInstance}
+                        openEventViewer={this.openEventViewer} getEventList={this.getSummaryEventList} />);
+                } else if (this.state.currentScreen === 'cameraScreen') {
+                    screenWithFooter.push(<CameraScreen key={'cameraScreen'} userInstance={this.state.userInstance} />);
+                } else if (this.state.currentScreen === 'profileScreen') {
+                    screenWithFooter.push(<ProfileScreen key={'profileScreen'} userInstance={this.state.userInstance} />);
+                }
+                screenWithFooter.push(<MainFooter key={'footer'} onChangeScreen={this.changeScreen} />);
+                return screenWithFooter;
+            } else {
+                return null;
             }
-            screenWithFooter.push(<MainFooter key={'footer'} onChangeScreen={this.changeScreen} />);
-            return screenWithFooter;
         }
     }
 
@@ -101,8 +114,33 @@ export default class AppContainer extends React.Component {
         });
     }
 
-    openPhotoViewer(eventId) {
-        this.props.navigation.navigate('EventPhotoViewer');
+    getSummaryEventList(callback) {
+        let url = `${Config.SERVER_BASE_URL}/api/events/summary/list`;
+        console.debug(url);
+
+        return fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.state.userInstance.appToken
+            }
+        })
+            .then(response => response.json())
+            .then(response => {
+                if (response) {
+                    return callback(response.body.closedEvents);
+                } else {
+                    return;
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    openEventViewer(event) {
+        this.props.navigation.navigate('EventViewer', { event: event });
     }
 
     render() {

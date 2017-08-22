@@ -47,12 +47,14 @@ class CameraComponent extends Component {
   }
 }
 
+// Style
+// FIXME: 79px is the height of the footer and something, change with something more dynamic
 const styles = StyleSheet.create({
   preview: {
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    height: Dimensions.get('window').height,
+    height: Dimensions.get('window').height - 79,
     width: Dimensions.get('window').width
   },
   capture: {

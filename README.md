@@ -31,6 +31,10 @@ cd ~/Android/Sdk/tools
 ## Generate apk
 [official guide](https://facebook.github.io/react-native/docs/signed-apk-android.html)
 
+```
+react-native run-android --variant=release
+```
+
 If issue related to version occured, launch this command:
 ```
 adb uninstall com.onehonedphoto

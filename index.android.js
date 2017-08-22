@@ -13,7 +13,7 @@ import {
 import { StackNavigator } from "react-navigation";
 
 // 1h1dphoto components
-import EventPhotoViewer from './src/components/EventPhotoViewer';
+import EventViewer from './src/components/EventViewer';
 import AppContainer from './src/AppContainer';
 
 // Theme
@@ -41,7 +41,7 @@ class OnehOnedphoto extends React.Component {
 export const AppNavigator = StackNavigator(
   {
     AppContainer: { screen: AppContainer },
-    EventPhotoViewer: { screen: EventPhotoViewer }
+    EventViewer: { screen: EventViewer }
   },
   {
     initialRouteName: "AppContainer"

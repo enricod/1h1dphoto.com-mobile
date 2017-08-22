@@ -18,29 +18,29 @@ import _ from 'lodash';
 export default class EventCard extends Component {
   constructor(props) {
     super(props);
-    this.openEventPhoto = this.openEventPhoto.bind(this);
+    this.openEventViewer = this.openEventViewer.bind(this);
   }
 
-  openEventPhoto() {
-    this.props.openPhotoViewer(this.props.event.id);
+  openEventViewer() {
+    this.props.openEventViewer(this.props.event);
   }
 
   render() {
     let imgInRow = 3;
-    let imgs = (this.props.event.photo.length < imgInRow) ? this.props.event.photo.length : imgInRow;
-    let rows = Math.ceil(this.props.event.photo.length / imgInRow);
-    let chunks = _.chunk(this.props.event.photo, imgInRow);
+    let imgs = (this.props.event.Submissions.length < imgInRow) ? this.props.event.Submissions.length : imgInRow;
+    let rows = Math.ceil(this.props.event.Submissions.length / imgInRow);
+    let chunks = _.chunk(this.props.event.Submissions, imgInRow);
     let cardRows = [];
 
     for (var i = 0; i < rows; i++) {
-      cardRows.push(<EventCardRow key={'eventCardRow' + i} photo={chunks[i]} />);
+      cardRows.push(<EventCardRow key={'eventCardRow' + i} photos={chunks[i]} />);
     };
 
     return (
       <Card>
         <CardItem header>
-          <Button onPress={this.openEventPhoto}>
-            <Text>{this.props.event.name}</Text>
+          <Button onPress={this.openEventViewer}>
+            <Text>{this.props.event.Name}</Text>
           </Button>
         </CardItem>
         <CardItem cardBody>
@@ -60,8 +60,8 @@ class EventCardRow extends Component {
 
   render() {
     let rowImages = [];
-    this.props.photo.forEach(function (photo, i) {
-      rowImages.push(<EventCardRowImage key={'eventCardRowImage' + i} uri={photo.uri} />);
+    this.props.photos.forEach(function (photo, i) {
+      rowImages.push(<EventCardRowImage key={'eventCardRowImage' + i} uri={photo.ImageName} />);
     });
 
     return (
@@ -78,6 +78,7 @@ class EventCardRowImage extends Component {
   }
 
   render() {
+    console.log(this.props.uri);
     return (
       <Col>
         <Image source={{ uri: this.props.uri }} style={{ height: 100, flex: 1 }} />
