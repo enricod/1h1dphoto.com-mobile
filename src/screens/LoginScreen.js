@@ -34,7 +34,7 @@ export default class LoginScreen extends React.Component {
     }
 
     onSendData() {
-        let url = `${Config.SERVER_BASE_URL}/api/user/register`;
+        let url = `${Config.SERVER_BASE_URL}/api/users/register`;
         console.log(url);
 
         return fetch(url, {
@@ -60,7 +60,7 @@ export default class LoginScreen extends React.Component {
 
     onVerifyCode() {
 
-        let url = `${Config.SERVER_BASE_URL}/api/user/codeValidation`;
+        let url = `${Config.SERVER_BASE_URL}/api/users/codeValidation`;
         console.log(url);
 
         return fetch(url, {

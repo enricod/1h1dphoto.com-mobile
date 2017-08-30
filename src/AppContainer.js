@@ -5,7 +5,7 @@ import { Container } from 'native-base';
 import Config from 'react-native-config'
 
 import MainHeader from './headers/MainHeader';
-import MainFooter from './components/MainFooter';
+import MainFooter from './footers/MainFooter';
 
 import HomeScreen from './screens/HomeScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -32,6 +32,7 @@ export default class AppContainer extends React.Component {
         this.saveLoginInfo = this.saveLoginInfo.bind(this);
         this.openEventViewer = this.openEventViewer.bind(this);
         this.getSummaryEventList = this.getSummaryEventList.bind(this);
+        this.getEventById = this.getEventById.bind(this);
     }
 
     static navigationOptions = ({ navigation }) => {
@@ -92,7 +93,7 @@ export default class AppContainer extends React.Component {
 
                 if (this.state.currentScreen === 'homeScreen') {
                     screenWithFooter.push(<HomeScreen key={'homeScreen'} userInstance={this.state.userInstance}
-                        openEventViewer={this.openEventViewer} getEventList={this.getSummaryEventList} />);
+                        openEventViewer={this.openEventViewer} getSummaryEventList={this.getSummaryEventList} getEventById={this.getEventById} />);
                 } else if (this.state.currentScreen === 'cameraScreen') {
                     screenWithFooter.push(<CameraScreen key={'cameraScreen'} userInstance={this.state.userInstance} />);
                 } else if (this.state.currentScreen === 'profileScreen') {
@@ -139,8 +140,35 @@ export default class AppContainer extends React.Component {
             });
     }
 
-    openEventViewer(event) {
-        this.props.navigation.navigate('EventViewer', { event: event });
+    getEventById(id, callback) {
+        let url = `${Config.SERVER_BASE_URL}/api/events/${id}`;
+        console.debug(url);
+
+        return fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.state.userInstance.appToken
+            }
+        })
+            .then(response => response.json())
+            .then(response => {
+                if (response) {
+                    return callback(response.body);
+                } else {
+                    return;
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    openEventViewer(eventId) {
+        this.getEventById(eventId, event => {
+            this.props.navigation.navigate('EventViewer', { event: event });
+        });
     }
 
     render() {

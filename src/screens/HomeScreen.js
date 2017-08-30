@@ -18,9 +18,8 @@ import {
 
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import Config from 'react-native-config'
 
-import EventCard from '../components/EventCard.js';
+import SummaryEventCard from '../components/SummaryEventCard.js';
 
 export default class HomeScreen extends React.Component {
 
@@ -30,7 +29,7 @@ export default class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    return this.props.getEventList((events) => {
+    return this.props.getSummaryEventList((events) => {
       this.setState({ events: events });
     });
   }
@@ -40,7 +39,7 @@ export default class HomeScreen extends React.Component {
 
     // Attendo caricamento elenco eventi
     for (let i = 0; i < this.state.events.length; i++) {
-      eventsCard.push(<EventCard key={i} event={this.state.events[i]} openEventViewer={this.props.openEventViewer} />);
+      eventsCard.push(<SummaryEventCard key={i} event={this.state.events[i]} openEventViewer={this.props.openEventViewer} />);
     }
 
     return (

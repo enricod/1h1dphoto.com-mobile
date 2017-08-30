@@ -18,7 +18,7 @@ import AppContainer from './src/AppContainer';
 
 // Theme
 import getTheme from './native-base-theme/components';
-import onehonedayphotoColor from './native-base-theme/variables/onehonedayphotoColor';
+import onehonedayphotoStyle from './native-base-theme/variables/onehonedayphotoStyle';
 
 /**
  * Main component
@@ -26,7 +26,7 @@ import onehonedayphotoColor from './native-base-theme/variables/onehonedayphotoC
 class OnehOnedphoto extends React.Component {
   render() {
     return (
-      <StyleProvider style={getTheme(onehonedayphotoColor)}>
+      <StyleProvider style={getTheme(onehonedayphotoStyle)}>
         <Root>
           <AppNavigator />
         </Root>
