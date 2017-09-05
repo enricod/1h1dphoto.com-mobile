@@ -110,17 +110,13 @@ export default class LoginScreen extends React.Component {
                             <Label>Username</Label>
                             <Input value={this.state.username}
                                 onChangeText={(v) => this.setState(
-                                    { username: v })}
-                            />
+                                    { username: v })} />
                         </Item>
                         <Item inlineLabel last>
                             <Label>Email</Label>
                             <Input value={this.state.email}
                                 onChangeText={(v) => this.setState(
-                                    { email: v }
-
-                                )}
-                            />
+                                    { email: v } )}  />
                         </Item>
                     </Form>
                     <Button full onPress={this.onSendData}
