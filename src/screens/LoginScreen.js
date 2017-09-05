@@ -103,7 +103,7 @@ export default class LoginScreen extends React.Component {
             return (
                 <Content padder>
                     <Form>
-                        <Item inlineLabel>
+                        <Item stackedLabel>
                             <Label>Code</Label>
                             <Input
                                 onChangeText={(v) => this.setState({ validationCode: v })}
@@ -120,14 +120,14 @@ export default class LoginScreen extends React.Component {
             return (
                 <Content padder>
                     <Form>
-                        <Item inlineLabel>
+                        <Item stackedLabel>
                             <Label>Username</Label>
                             <Input value={this.state.username}
                                 onChangeText={(v) => this.setState(
                                     { username: v })}
                             />
                         </Item>
-                        <Item inlineLabel last>
+                        <Item stackedLabel>
                             <Label>Email</Label>
                             <Input value={this.state.email}
                                 onChangeText={(v) => this.setState(

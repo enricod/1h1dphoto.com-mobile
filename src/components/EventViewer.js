@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     Image,
-    TouchableHighlight,
+    TouchableOpacity,
     Modal,
     View,
     Dimensions,
@@ -14,10 +14,10 @@ import {
     Button
 } from 'native-base';
 
-import PhotoViewer from './PhotoViewer';
 import Config from 'react-native-config'
 import ImageViewer from 'react-native-image-zoom-viewer';
 
+import PhotoViewer from './PhotoViewer';
 import onehonedayphotoStyle from '../../native-base-theme/variables/onehonedayphotoStyle';
 
 export default class EventViewer extends Component {
@@ -82,7 +82,10 @@ export default class EventViewer extends Component {
 class EventViewerRowContainer extends Component {
     constructor(props) {
         super(props);
+
         this.openPhotoViewer = this.props.openPhotoViewer.bind(this);
+
+        this.imgSize = (Dimensions.get('window').width / 3);
     }
 
     _keyExtractor = (item, index) => index
@@ -96,33 +99,36 @@ class EventViewerRowContainer extends Component {
             <FlatList
                 data={this.props.photos}
                 keyExtractor={this._keyExtractor}
-                renderItem={({ item, index }) => (<EventViewerImage photo={item} onPressItem={() => this._onPressItem(index)} />)}
+                renderItem={({ item, index }) => (<EventViewerImage photo={item} onPressItem={() => this._onPressItem(index)} size={this.imgSize} />)}
                 numColumns={3}
-                
+                initialNumToRender={12}
             />
         )
     }
 }
 
-class EventViewerImage extends Component {
+/**
+ * Single image component
+ * Extend "React.PureComponent" instead of "Component" for performance issue with Component
+ */
+class EventViewerImage extends React.PureComponent {
     constructor(props) {
         super(props);
     }
 
     render() {
-        const imgSquareSize = (Dimensions.get('window').width / 3);
         let imgStyle = {
             alignSelf: 'stretch',
-            height: imgSquareSize,
-            width: imgSquareSize,
+            height: this.props.size,
+            width: this.props.size,
             flex: 1
         };
 
         return (
             <View>
-                <TouchableHighlight key={'eventImageTouchable' + this.props.photo.ID} onPress={this.props.onPressItem} underlayColor="white">
+                <TouchableOpacity key={'eventImageTouchable' + this.props.photo.ID} onPress={this.props.onPressItem} underlayColor="white">
                     <Image source={{ uri: Config.SERVER_BASE_URL + this.props.photo.ThumbUrl }} style={imgStyle} resizeMode="contain" />
-                </TouchableHighlight>
+                </TouchableOpacity>
             </View>
         )
     }

@@ -15,6 +15,7 @@ import {
 import PropTypes from 'prop-types';
 import Config from 'react-native-config'
 import _ from 'lodash';
+
 import onehonedayphotoStyle from '../../native-base-theme/variables/onehonedayphotoStyle';
 
 export default class SummaryEventCard extends Component {
