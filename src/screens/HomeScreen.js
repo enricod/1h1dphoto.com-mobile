@@ -6,6 +6,7 @@ import {
   AsyncStorage
 } from 'react-native';
 import {
+  Content,
   Text,
   Button,
   Grid,
@@ -17,63 +18,36 @@ import {
 
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import Config from 'react-native-config'
 
-import EventCard from './EventCard.js';
+import SummaryEventCard from '../components/SummaryEventCard.js';
 
 export default class HomeScreen extends React.Component {
+
   constructor(props) {
     super(props);
-
     this.state = { events: [] }
-
-    this.getEventList = this.getEventList.bind(this);
   }
 
   componentDidMount() {
-    return this.getEventList();
-  }
-
-  getEventList() {
-    let url = `${Config.SERVER_BASE_URL}/api/Events?filter[include]=photo&filter[include]=user`;
-    console.debug(url);
-
-    return fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': global.token.id
-      }
-    })
-      .then(response => response.json())
-      .then(response => {
-        if (!!response) {
-          this.setState({ events: response });
-        }
-        return;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    return this.props.getSummaryEventList((events) => {
+      this.setState({ events: events });
+    });
   }
 
   render() {
     let eventsCard = [];
 
     // Attendo caricamento elenco eventi
-    if (this.state.events.length > 0) {
-      this.state.events.forEach(function (event, i) {
-        eventsCard.push(<EventCard key={i} event={event} />);
-      });
+    for (let i = 0; i < this.state.events.length; i++) {
+      eventsCard.push(<SummaryEventCard key={i} event={this.state.events[i]} openEventViewer={this.props.openEventViewer} />);
     }
+
     return (
-      <View>
+      <Content padder>
+
         <CurrentEventCard />
-        <View>
-          {eventsCard}
-        </View>
-      </View>
+        {eventsCard}
+      </Content>
     )
   }
 }
@@ -124,4 +98,6 @@ class CurrentEventCard extends Component {
   }
 }
 
-HomeScreen.PropTypes = {}
+HomeScreen.PropTypes = {
+  openEventViewer: PropTypes.func
+}

@@ -8,12 +8,14 @@
   },
   "dependencies": {
     "lodash": "^4.17.4",
-    "native-base": "^2.1.5",
-    "react": "16.0.0-alpha.12",
-    "react-native": "0.45.0",
-    "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
+    "native-base": "2.3.1",
+    "react": "16.0.0-alpha.13",
+    "react-native": "0.46.4",
+    "react-native-camera": "^0.10.0",
     "react-native-config": "^0.5.0",
-    "react-native-photo-browser": "^0.3.1"
+    "react-native-image-zoom-viewer": "^2.0.9",
+    "react-native-photo-browser": "^0.3.1",
+    "react-navigation": "^1.0.0-beta.11"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

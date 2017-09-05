@@ -5,13 +5,13 @@ import {
     TextInput
 } from 'react-native';
 import {
+    Content,
     Text,
     Button,
     Form,
     Input,
     Item,
-    Label,
-    Content
+    Label
 } from 'native-base';
 import PropTypes from 'prop-types';
 import Config from 'react-native-config'
@@ -24,8 +24,7 @@ export default class LoginScreen extends React.Component {
         this.state = {
             username: '',
             email: '',
-            codeText: '',
-            codeFromApi: '',
+            validationCode: '',
             insertCode: false,
             codeVerification: true
         }
@@ -35,7 +34,7 @@ export default class LoginScreen extends React.Component {
     }
 
     onSendData() {
-        let url = `${Config.SERVER_BASE_URL}/api/AppUsers/register`;
+        let url = `${Config.SERVER_BASE_URL}/api/users/register`;
         console.log(url);
 
         return fetch(url, {
@@ -50,7 +49,7 @@ export default class LoginScreen extends React.Component {
             .then(response => {
                 if (!!response) {
                     console.log(response.code);
-                    this.setState({ insertCode: true, codeFromApi: response.code, token: response.token });
+                    this.setState({ insertCode: true, appToken: response.body.appToken });
                 }
                 return;
             })
@@ -60,21 +59,36 @@ export default class LoginScreen extends React.Component {
     }
 
     onVerifyCode() {
-        let res = this.state.codeText === this.state.codeFromApi;
-        if (res) {
 
-            // Save user and login token
-            this.props.saveLoginInfo({
-                username: this.state.username,
-                email: this.state.email,
-                code: this.state.codeFromApi,
-                isAnon: false
+        let url = `${Config.SERVER_BASE_URL}/api/users/codeValidation`;
+        console.log(url);
+
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
-                this.state.token
-            );
-        } else {
-            this.setState({ codeVerification: false });
-        }
+            body: JSON.stringify({ validationCode: this.state.validationCode, appToken: this.state.appToken })
+        })
+            .then(response => response.json())
+            .then(response => {
+                if (!!response && response.success) {
+                    console.log(response.code);
+                    // Save user and login token
+                    this.props.saveLoginInfo({
+                        username: this.state.username,
+                        email: this.state.email,
+                        code: this.state.validationCode
+                    },
+                        this.state.appToken
+                    );
+                } else {
+                    this.setState({ codeVerification: false });
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
     }
 
     render() {
@@ -87,12 +101,12 @@ export default class LoginScreen extends React.Component {
         }
         if (this.state.insertCode) {
             return (
-                <Content>
+                <Content padder>
                     <Form>
                         <Item inlineLabel>
                             <Label>Code</Label>
-                            <Input value={this.state.codeText}
-                                onChangeText={(v) => this.setState({ codeText: v })}
+                            <Input
+                                onChangeText={(v) => this.setState({ validationCode: v })}
                             />
                         </Item>
                     </Form>
@@ -104,7 +118,7 @@ export default class LoginScreen extends React.Component {
             )
         } else {
             return (
-                <Content>
+                <Content padder>
                     <Form>
                         <Item inlineLabel>
                             <Label>Username</Label>
