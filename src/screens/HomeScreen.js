@@ -25,12 +25,12 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { events: [] }
+    this.state = { futureEvents: [], closedEvents: [] }
   }
 
   componentDidMount() {
-    return this.props.getSummaryEventList((events) => {
-      this.setState({ events: events });
+    return this.props.getSummaryEventList((futureEvents, closedEvents) => {
+      this.setState({ futureEvents: futureEvents, closedEvents: closedEvents });
     });
   }
 
@@ -38,14 +38,13 @@ export default class HomeScreen extends React.Component {
     let eventsCard = [];
 
     // Attendo caricamento elenco eventi
-    for (let i = 0; i < this.state.events.length; i++) {
-      eventsCard.push(<SummaryEventCard key={i} event={this.state.events[i]} openEventViewer={this.props.openEventViewer} />);
+    for (let i = 0; i < this.state.closedEvents.length; i++) {
+      eventsCard.push(<SummaryEventCard key={i} event={this.state.closedEvents[i]} openEventViewer={this.props.openEventViewer} />);
     }
 
     return (
       <Content padder>
-
-        <CurrentEventCard />
+        <CurrentEventCard futureEvents={this.state.futureEvents} />
         {eventsCard}
       </Content>
     )
@@ -56,18 +55,28 @@ class CurrentEventCard extends Component {
   constructor(props) {
     super(props);
 
+    
     this.state = {
-      activeEvent: false,
+      
       nextEvent: 6900
     }
     this.selectEvent = this.selectEvent.bind(this);
   }
 
+  hasEventoAperto( futureEvents) {
+    return !_.isUndefined(this.findEventoAperto(futureEvents));
+  }
+  findEventoAperto( futureEvents) {
+    let now = new Date();
+    return _.find( futureEvents, function(e ) {
+        return new Date(e.Start) <= now && new Date(e.End) > now;
+    });
+  }
   componentDidMount() {
-    this.timer = setInterval(() => {
-      this.setState({ nextEvent: this.state.nextEvent - 1 })
-    },
-      1000);
+    //this.timer = setInterval(() => {
+    //  this.setState({ nextEvent: this.state.nextEvent - 1 })
+    //},
+    //  1000);
   }
 
   componentWillUnmount() {
@@ -80,11 +89,11 @@ class CurrentEventCard extends Component {
 
   render() {
     let toDisplay = null;
-
-    if (this.state.activeEvent) {
-      toDisplay = <Button onPress={this.selectEvent}><Text>GO!!!</Text></Button>
+    let futureEvent = this.findEventoAperto(this.props.futureEvents);
+    if ( futureEvent ) {
+      toDisplay = <Button onPress={this.selectEvent}><Text>{futureEvent.Name}</Text></Button>
     } else {
-      toDisplay = <H1>Next event: {this.state.nextEvent.toString()}</H1>
+      toDisplay = <H1>Next event: boh</H1>
     }
     return (
       <Card>

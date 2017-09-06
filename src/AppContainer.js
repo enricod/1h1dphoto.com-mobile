@@ -130,9 +130,9 @@ export default class AppContainer extends React.Component {
             .then(response => response.json())
             .then(response => {
                 if (response) {
-                    return callback(response.body.closedEvents);
+                    return callback(response.body.futureEvents, response.body.closedEvents);
                 } else {
-                    return;
+                    return callback([], []);
                 }
             })
             .catch((error) => {
