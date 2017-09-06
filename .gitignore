@@ -51,13 +51,6 @@ buck-out/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
-
-# Android SDK
-local.properties
-.expo
 .vscode
-
-# Enviroments
-.env
 .env.debug
-.env.production
+.expo
