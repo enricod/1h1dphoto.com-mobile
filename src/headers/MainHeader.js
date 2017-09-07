@@ -14,14 +14,15 @@ export default class MainHeader extends React.Component {
 
   render() {
     let headerByScreen;
+    // navigation in props is needed by profileScreen to open settingsPage in the navigation
     if (this.props.screen === 'loginScreen') {
-      headerByScreen = <LoginScreenHeader />;
+      headerByScreen = <LoginScreenHeader navigation={this.props.navigation}/>;
     } else if (this.props.screen === 'cameraScreen') {
-      headerByScreen = <CameraScreenHeader />;
+      headerByScreen = <CameraScreenHeader navigation={this.props.navigation}/>;
     } else if (this.props.screen === 'homeScreen') {
-      headerByScreen = <HomeScreenHeader />;
+      headerByScreen = <HomeScreenHeader navigation={this.props.navigation}/>;
     } else if (this.props.screen === 'profileScreen') {
-      headerByScreen = <ProfileScreenHeader />;
+      headerByScreen = <ProfileScreenHeader navigation={this.props.navigation}/>;
     } else {
       headerByScreen = null;
     }

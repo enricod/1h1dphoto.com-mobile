@@ -15,6 +15,8 @@ import { StackNavigator } from "react-navigation";
 // 1h1dphoto components
 import EventViewer from './src/components/EventViewer';
 import AppContainer from './src/AppContainer';
+import SettingsPage from './src/components/SettingsPage';
+import CameraPreview from './src/components/CameraPreview';
 
 // Theme
 import getTheme from './native-base-theme/components';
@@ -41,7 +43,9 @@ class OnehOnedphoto extends React.Component {
 export const AppNavigator = StackNavigator(
   {
     AppContainer: { screen: AppContainer },
-    EventViewer: { screen: EventViewer }
+    EventViewer: { screen: EventViewer },
+    SettingsPage: { screen: SettingsPage },
+    CameraPreview: { screen: CameraPreview }
   },
   {
     initialRouteName: "AppContainer"

@@ -46,7 +46,7 @@ export default class AppContainer extends React.Component {
         return {
             title: navigation.state.currentScreen,
             header: (
-                <MainHeader screen={getNavigationParams()} />
+                <MainHeader navigation={navigation} screen={getNavigationParams()} />
             )
         };
     };
@@ -95,7 +95,7 @@ export default class AppContainer extends React.Component {
                     screenWithFooter.push(<HomeScreen key={'homeScreen'} userInstance={this.state.userInstance}
                         openEventViewer={this.openEventViewer} getSummaryEventList={this.getSummaryEventList} getEventById={this.getEventById} />);
                 } else if (this.state.currentScreen === 'cameraScreen') {
-                    screenWithFooter.push(<CameraScreen key={'cameraScreen'} userInstance={this.state.userInstance} />);
+                    screenWithFooter.push(<CameraScreen navigation={this.props.navigation} key={'cameraScreen'} userInstance={this.state.userInstance} />);
                 } else if (this.state.currentScreen === 'profileScreen') {
                     screenWithFooter.push(<ProfileScreen key={'profileScreen'} userInstance={this.state.userInstance} />);
                 }

@@ -9,6 +9,14 @@ import {
 } from 'native-base';
 
 export default class ProfileScreenHeader extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  openSettingsPage() {
+    this.props.navigation.navigate('SettingsPage');
+  }
+
   render() {
     return (
       <Header>
@@ -16,7 +24,7 @@ export default class ProfileScreenHeader extends React.Component {
           <Title>ProfileScreen</Title>
         </Body>
         <Right>
-        <Button transparent>
+        <Button transparent onPress={this.openSettingsPage.bind(this)}>
           <Icon name='md-options' />
         </Button>
       </Right>

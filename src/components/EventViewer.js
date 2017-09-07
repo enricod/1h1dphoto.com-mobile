@@ -67,7 +67,7 @@ export default class EventViewer extends Component {
             componentsToDisplay = <Content padder>
                 <Text>Start: {this.state.event.Start}</Text>
                 <Text>End: {this.state.event.End}</Text>
-                <EventViewerRowContainer photos={this.state.photos} openPhotoViewer={this.openPhotoViewer} />
+                <EventViewerContainer photos={this.state.photos} openPhotoViewer={this.openPhotoViewer} />
             </Content>
         }
 
@@ -79,12 +79,11 @@ export default class EventViewer extends Component {
     }
 }
 
-class EventViewerRowContainer extends Component {
+class EventViewerContainer extends Component {
     constructor(props) {
         super(props);
 
         this.openPhotoViewer = this.props.openPhotoViewer.bind(this);
-
         this.imgSize = (Dimensions.get('window').width / 3);
     }
 
@@ -101,7 +100,10 @@ class EventViewerRowContainer extends Component {
                 keyExtractor={this._keyExtractor}
                 renderItem={({ item, index }) => (<EventViewerImage photo={item} onPressItem={() => this._onPressItem(index)} size={this.imgSize} />)}
                 numColumns={3}
-                initialNumToRender={12}
+                initialNumToRender={9}
+                getItemLayout={(data, index) => (
+                    { length: this.imgSize, offset: this.imgSize * index, index }
+                )}
             />
         )
     }

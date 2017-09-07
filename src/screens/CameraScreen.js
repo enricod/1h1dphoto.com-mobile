@@ -23,7 +23,7 @@ export default class CameraScreen extends React.Component {
   render() {
     return (
       <Content>
-        <CameraComponent userInstance={this.props.userInstance} />
+        <CameraComponent userInstance={this.props.userInstance} navigation={this.props.navigation} />
       </Content>
     );
   }
@@ -39,39 +39,13 @@ class CameraComponent extends Component {
     //options.location = ...
     this.camera.capture({ metadata: options })
       .then((data) => {
-        console.log(data);
-        this.uploadFile(data);
+        this.openCameraPreview(data);
       })
       .catch(err => console.error(err));
   }
 
-  uploadFile(data) {
-    let url = `${Config.SERVER_BASE_URL}/api/images/upload`;
-
-    const file = {
-      uri: data.path,
-      name: data.path,
-      type: 'image/jpg'
-    }
-
-    const body = new FormData()
-    body.append('image', file)
-
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Authorization': this.props.userInstance.appToken
-      },
-      body
-    }).then(response => response.json())
-      .then(response => {
-        if (response) {
-          console.log(response);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  openCameraPreview(data) {
+    this.props.navigation.navigate('CameraPreview', {imageUri: data.path, userInstance: this.props.userInstance});
   }
 
   render() {
@@ -83,7 +57,9 @@ class CameraComponent extends Component {
         style={styles.preview}
         aspect={Camera.constants.Aspect.fill}
         flashMode={Camera.constants.FlashMode.auto}
-        captureQuality={Camera.constants.CaptureQuality["1024p"]}>
+        captureQuality={Camera.constants.CaptureQuality["1080p"]}
+        jpegQuality={70}
+        >
         <Text style={styles.captureButton} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
       </Camera>
     );
