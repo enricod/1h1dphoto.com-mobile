@@ -27,7 +27,15 @@ cd ~/Android/Sdk/tools
 1. Connect device or start emulator
 1. ```react-native run-android```
 
-
+## Build and dependencies
+```
+npm install
+```
+Link dependencies:
+```
+react-native link react-native-vector-icons
+react-native link react-native-camera
+```
 ## Generate apk
 [official guide](https://facebook.github.io/react-native/docs/signed-apk-android.html)
 
