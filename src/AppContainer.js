@@ -116,7 +116,7 @@ export default class AppContainer extends React.Component {
     }
 
     getSummaryEventList(callback) {
-        let url = `${Config.SERVER_BASE_URL}/api/events/summary/list`;
+        let url = `${Config.SERVER_BASE_URL}/events/summary/list`;
         console.debug(url);
 
         return fetch(url, {
@@ -141,7 +141,7 @@ export default class AppContainer extends React.Component {
     }
 
     getEventById(id, callback) {
-        let url = `${Config.SERVER_BASE_URL}/api/events/${id}`;
+        let url = `${Config.SERVER_BASE_URL}/events/${id}`;
         console.debug(url);
 
         return fetch(url, {

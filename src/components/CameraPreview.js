@@ -23,7 +23,7 @@ export default class CameraPreview extends Component {
     };
 
     uploadFile(data) {
-        let url = `${Config.SERVER_BASE_URL}/api/images/upload`;
+        let url = `${Config.SERVER_BASE_URL}/images/upload`;
 
         // Image uri and userInstance are passed as navigator params
         const imgUri = this.props.navigation.state.params.imageUri;
